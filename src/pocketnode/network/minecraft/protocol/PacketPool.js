@@ -6,6 +6,11 @@ const ResourcePackClientResponsePacket = pocketnode("network/minecraft/protocol/
 const ResourcePackChunkRequestPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkRequestPacket");
 const RequestChunkRadiusPacket = pocketnode("network/minecraft/protocol/RequestChunkRadiusPacket");
 const TextPacket = pocketnode("network/minecraft/protocol/TextPacket");
+const ScriptCustomEventPacket = pocketnode("network/minecraft/protocol/ScriptCustomEventPacket");
+const SetScoreboardIdentityPacket = pocketnode("network/minecraft/protocol/SetScoreboardIdentityPacket");
+const SetScorePacket = pocketnode("network/minecraft/protocol/SetScorePacket");
+const SpawnParticleEffectPacket = pocketnode("network/minecraft/protocol/SpawnParticleEffectPacket");
+const UpdateSoftEnumPacket = pocketnode("network/minecraft/protocol/UpdateSoftEnumPacket");
 
 class PacketPool {
     constructor(){
@@ -36,6 +41,11 @@ class PacketPool {
         this.registerPacket(ResourcePackChunkRequestPacket);
         this.registerPacket(RequestChunkRadiusPacket);
         this.registerPacket(TextPacket);
+        this.registerPacket(ScriptCustomEventPacket);
+        this.registerPacket(SetScoreboardIdentityPacket);
+        this.registerPacket(SetScorePacket);
+        this.registerPacket(SpawnParticleEffectPacket);
+        this.registerPacket(UpdateSoftEnumPacket);
     }
 }
 

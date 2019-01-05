@@ -7,6 +7,7 @@ class StartGamePacket extends DataPacket {
     }
 
     initVars(){
+
         this.entityUniqueId = 0;
         this.entityRuntimeId = 0;
         this.playerGamemode = 0;
@@ -27,6 +28,7 @@ class StartGamePacket extends DataPacket {
         this.hasAchievementsDisabled = true;
         this.time = -1;
         this.eduMode = false;
+        this.hasEduFeaturesEnabled = false;
 
         this.rainLevel = 0.0;
         this.lightningLevel = 0.0;
@@ -42,7 +44,14 @@ class StartGamePacket extends DataPacket {
         this.hasTrustPlayersEnabled = false;
         this.defaultPlayerPermission = 1;//PlayerPermissions::MEMBER; //TODO
         this.xboxLiveBroadcastMode = 0; //TODO: find values
-        this.serverChunkTickRadius = 4;
+        this.xboxLiveBroadcastIntent = false;
+        this.hasLockedBehaviorPack = false;
+        this.hasLockedResourcePack = false;
+        this.isFromLockedWorldTemplate = false;
+        this.useMsaGamertagsOnly = false;
+        this.isFromWorldTemplate = false;
+        this.isWorldTemplateOptionLocked = false;
+	    this.serverChunkTickRadius = 4;
 
         this.levelId = ""; //base64 string, usually the same as world folder name in vanilla
 
@@ -79,6 +88,7 @@ class StartGamePacket extends DataPacket {
         this.hasAchievementsDisabled = this.readBool();
         this.time = this.readVarInt();
         this.eduMode = this.readBool();
+        this.hasEduFeaturesEnabled = this.readBool();
         this.rainLevel = this.readLFloat();
         this.lightningLevel = this.readLFloat();
         this.isMultiplayerGame = this.readBool();
@@ -92,6 +102,13 @@ class StartGamePacket extends DataPacket {
         this.hasTrustPlayersEnabled = this.readBool();
         this.defaultPlayerPermission = this.readVarInt();
         this.xboxLiveBroadcastMode = this.readVarInt();
+	    this.xboxLiveBroadcastIntent = this.readBool();
+        this.hasLockedBehaviorPack = this.readBool();
+        this.hasLockedResourcePack = this.readBool();
+        this.isFromLockedWorldTemplate = this.readBool();
+        this.useMsaGamertagsOnly = this.readBool();
+        this.isFromWorldTemplate = this.readBool();
+        this.isWorldTemplateOptionLocked = this.readBool();
         this.serverChunkTickRadius = this.readLInt();
 
         this.levelId = this.readString();
@@ -122,6 +139,7 @@ class StartGamePacket extends DataPacket {
             .writeBool(this.hasAchievementsDisabled)
             .writeVarInt(this.time)
             .writeBool(this.eduMode)
+            .writeBool(this.hasEduFeaturesEnabled)
             .writeLFloat(this.rainLevel)
             .writeLFloat(this.lightningLevel)
             .writeBool(this.isMultiplayerGame)
@@ -135,6 +153,13 @@ class StartGamePacket extends DataPacket {
             .writeBool(this.hasTrustPlayersEnabled)
             .writeVarInt(this.defaultPlayerPermission)
             .writeVarInt(this.xboxLiveBroadcastMode)
+            .writeVarInt(this.xboxLiveBroadcastIntent)
+            .writeVarInt(this.hasLockedBehaviorPack)
+            .writeVarInt(this.hasLockedResourcePack)
+            .writeVarInt(this.isFromLockedWorldTemplate)
+            .writeBool(this.useMsaGamertagsOnly)
+            .writeBool(this.isFromWorldTemplate)
+            .writeBool(this.isWorldTemplateOptionLocked)
             .writeLInt(this.serverChunkTickRadius);
 
         this.writeString(this.levelId)

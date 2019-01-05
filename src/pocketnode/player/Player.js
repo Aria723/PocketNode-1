@@ -125,6 +125,8 @@ class Player extends CommandSender {
     handleLogin(packet){
         CheckTypes([LoginPacket, packet]);
 
+        console.log(packet.clientData); // TODO: Figure out why this is an empty array
+
         if(this.loggedIn){
             return false;
         }
@@ -161,11 +163,13 @@ class Player extends CommandSender {
             return true;
         }
 
+        console.log(packet);
+
         let skin = new Skin(
             packet.clientData.SkinId,
             Base64.decode(packet.clientData.SkinData ? packet.clientData.SkinData : ""),
             Base64.decode(packet.clientData.CapeData ? packet.clientData.CapeData : ""),
-            packet.clientData.SkinGeometryName,
+            (packet.clientData.SkinGeometryName ? packet.clientData.SkinGeometryName : ""),
             Base64.decode(packet.clientData.SkinGeometry ? packet.clientData.SkinGeometry : "")
         );
 
@@ -386,17 +390,10 @@ class Player extends CommandSender {
     kick(reason = "", isAdmin = true){
         let message;
         if(isAdmin){
-            if(true){//todo: not is banned
-                message = "Kicked by admin." + (reason !== "" ? " Reason: " + reason : "");
-            }else{
-                message = reason;
-            }
+
+	        message = "Kicked by admin." + (reason !== "" ? " Reason: " + reason : "");
         }else{
-            if(reason === ""){
-                message = "Unknown Reason.";
-            }else{
-                message = reason;
-            }
+            message = reason !== "" ? reason : "Unknown Reason.";
         }
 
         this.close(reason, message);

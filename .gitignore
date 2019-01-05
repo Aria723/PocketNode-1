@@ -57,6 +57,9 @@ typings/
 # dotenv environment variables file
 .env
 
+# Jetbrains files
+.idea/
+
 # PocketNode files
 players/
 plugins/

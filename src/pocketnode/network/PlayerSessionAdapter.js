@@ -168,6 +168,34 @@ class PlayerSessionAdapter {
         return false;
     }
 
+	handleSetLocalPlayerAsInitialized(packet){
+		return false;
+	}
+
+	handleSetScoreboardIdentity(packet){
+        return false;
+    }
+
+	handleUpdateSoftEnum(packet){
+        return false;
+    }
+
+	handleScriptCustomEvent(packet){
+        return false;
+    }
+
+	handleSetScore(packet){
+        return false;
+    }
+
+	handleSpawnParticleEffect(packet){
+        return false;
+    }
+
+	handleResourcePackStack(packet){
+        return false;
+    }
+
     toString(){
         return this.player.getName() !== "" ? this.player.getName() : this.player.getAddress() + ":" + this.player.getPort();
     }

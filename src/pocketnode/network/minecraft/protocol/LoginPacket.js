@@ -19,6 +19,7 @@ class LoginPacket extends DataPacket {
         this.xuid = "";
         this.identityPublicKey = "";
         this.serverAddress = "";
+        this.locale = "";
 
         this.chainData = [];
         this.clientDataJwt = "";
@@ -50,6 +51,7 @@ class LoginPacket extends DataPacket {
         }
 
         let stream = new BinaryStream(this.read(this.readUnsignedVarInt()));
+        //let stream = new BinaryStream(this.readString());
         this.chainData = JSON.parse(stream.read(stream.readLInt()).toString());
 
         this.chainData.chain.forEach(chain => {
@@ -76,6 +78,8 @@ class LoginPacket extends DataPacket {
 
         this.clientId = Isset(this.clientData.ClientRandomId) ? this.clientData.ClientRandomId : null;
         this.serverAddress = Isset(this.clientData.ServerAddress) ? this.clientData.ServerAddress : null;
+
+        this.locale = this.clientData.languageCode;
     }
 
     handle(session){

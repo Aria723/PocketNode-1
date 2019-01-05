@@ -13,6 +13,7 @@ const ConsoleCommandReader = pocketnode("command/ConsoleCommandReader");
 const HelpCommand = pocketnode("command/defaults/HelpCommand");
 const StopCommand = pocketnode("command/defaults/StopCommand");
 const PluginsCommand = pocketnode("command/defaults/PluginsCommand");
+const VersionCommand = pocketnode("command/defaults/VersionCommand");
 
 const Player = pocketnode("player/Player");
 const PlayerList = pocketnode("player/PlayerList");
@@ -170,6 +171,7 @@ class Server {
         this.getCommandMap().registerCommand(new HelpCommand());
         this.getCommandMap().registerCommand(new StopCommand());
         this.getCommandMap().registerCommand(new PluginsCommand());
+        this.getCommandMap().registerCommand(new VersionCommand());
     }
 
     /**

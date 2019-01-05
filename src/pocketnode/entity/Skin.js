@@ -18,9 +18,11 @@ class Skin {
 
     isValid(){
         let size = this._skinData.length;
+	    console.log(this._skinId);
+	    console.log(size);
         return (
             this._skinId !== "" &&
-            (size === 16384 || size === 8192) &&
+            (size === 16384 || size === 8192 || size === 65536) &&
             (this._capeData === "" || this._capeData.length === 8192)
         );
     }
