@@ -4,14 +4,16 @@ const ScoreboardEntry = pocketnode("network/minecraft/protocol/types/ScoreboardI
 
 class SetScoreboardIdentityPacket extends DataPacket {
 
-	TYPE_REGISTER_IDENTITY = 0;
-	TYPE_CLEAR_IDENTITY = 1;
+
 
 	static getId(){
 		return MinecraftInfo.SET_SCOREBOARD_IDENTITY_PACKET;
 	}
 
 	initVars(){
+		this.TYPE_REGISTER_IDENTITY = 0;
+		this.TYPE_CLEAR_IDENTITY = 1;
+
 		this.type = 0;
 		this.entries = [];
 	}

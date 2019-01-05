@@ -42,13 +42,13 @@ class LoginPacket extends DataPacket {
     _decodePayload(){
         this.protocol = this.readInt();
 
-        if(this.protocol !== MinecraftInfo.PROTOCOL){
+        /*if(this.protocol !== MinecraftInfo.PROTOCOL){
             if(this.protocol > 0xffff){
                 this.offset -= 6;
                 this.protocol = this.readInt();
             }
             return;
-        }
+        }*/
 
         let stream = new BinaryStream(this.read(this.readUnsignedVarInt()));
         //let stream = new BinaryStream(this.readString());

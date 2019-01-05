@@ -4,14 +4,14 @@ const ScorePacketEntry = pocketnode("network/minecraft/protocol/types/ScorePacke
 
 class SetScorePacket extends DataPacket {
 
-	TYPE_CHANGE = 0;
-	TYPE_REMOVE = 1;
-
 	static getId(){
 		return MinecraftInfo.SET_SCORE_PACKET;
 	}
 
 	initVars(){
+		this.TYPE_CHANGE = 0;
+		this.TYPE_REMOVE = 1;
+
 		this.type = 0;
 		this.entries = [];
 	}
