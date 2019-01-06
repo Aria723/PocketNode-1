@@ -3,6 +3,11 @@ const DimensionIds = pocketnode("network/minecraft/protocol/types/DimensionIds")
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class SpawnParticleEffectPacket extends DataPacket {
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.SPAWN_PARTICLE_EFFECT_PACKET;
 	}
@@ -13,14 +18,9 @@ class SpawnParticleEffectPacket extends DataPacket {
 		this.particleName = "";
 	}
 
-	constructor(){
-		super();
-		this.initVars();
-	}
-
 	_decodePayload(){
 		this.dimensionId = this.readByte();
-		this.position = this.getVector3Obj();
+		this.position = this.readVector3Obj();
 		this.particleName = this.readString();
 	}
 

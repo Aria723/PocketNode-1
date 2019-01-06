@@ -1,37 +1,37 @@
 class Event {
-    static getName(){
-        return this.name.toLowerCase().substr(-5) === "event" ? this.name.slice(0, -5) : this.name;
-    }
+	constructor(){
+		this._isCancelled = false;
+	}
 
-    getName(){
-        return this.constructor.getName();
-    }
+	static getName(){
+		return this.name.toLowerCase().substr(-5) === "event" ? this.name.slice(0, -5) : this.name;
+	}
 
-    isCancellable(){
-        return false;
-    }
-    
-    constructor(){
-        this._isCancelled = false;
-    }
+	getName(){
+		return this.constructor.getName();
+	}
 
-    isCancelled(){
-        if(!this.isCancellable()){
-            throw new Error("Event is not cancellable");
-        }
+	isCancellable(){
+		return false;
+	}
 
-        return this._isCancelled === true;
-    }
+	isCancelled(){
+		if(!this.isCancellable()){
+			throw new Error("Event is not cancellable");
+		}
 
-    setCancelled(v = true){
-        CheckTypes([Boolean, v]);
+		return this._isCancelled === true;
+	}
 
-        if(!this.isCancellable()){
-            throw new Error("Event is not cancellable");
-        }
+	setCancelled(v = true){
+		CheckTypes([Boolean, v]);
 
-        this._isCancelled = v;
-    }
+		if(!this.isCancellable()){
+			throw new Error("Event is not cancellable");
+		}
+
+		this._isCancelled = v;
+	}
 }
 
 module.exports = Event;

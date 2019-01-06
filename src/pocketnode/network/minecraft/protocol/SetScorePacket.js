@@ -4,22 +4,27 @@ const ScorePacketEntry = pocketnode("network/minecraft/protocol/types/ScorePacke
 
 class SetScorePacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.SET_SCORE_PACKET;
 	}
 
-	static TYPE_CHANGE(){return 0;}
-	static TYPE_REMOVE(){return 1;}
+	static TYPE_CHANGE(){
+		return 0;
+	}
+
+	static TYPE_REMOVE(){
+		return 1;
+	}
 
 	initVars(){
 
 		this.type = 0;
 		this.entries = [];
-	}
-
-	constructor(){
-		super();
-		this.initVars();
 	}
 
 	_decodePayload(){
@@ -35,7 +40,7 @@ class SetScorePacket extends DataPacket {
 				switch(entry.type){
 					case ScorePacketEntry.TYPE_PLAYER():
 					case ScorePacketEntry.TYPE_ENTITY():
-						entry.entityUniqueId = this.getEntityUniqueId();
+						entry.entityUniqueId = this.readEntityUniqueId();
 						break;
 					case ScorePacketEntry.TYPE_FAKE_PLAYER():
 						entry.customName = this.readString();

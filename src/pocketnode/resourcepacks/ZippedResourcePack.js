@@ -4,88 +4,88 @@ const HashFile = pocketnode("utils/methods/HashFile");
 const AdmZip = require("adm-zip");
 
 class ZippedResourcePack extends ResourcePack {
-    initVars(){
-        this._path = "";
-        this._data = null;
-        this._manifest = {};
-        this._sha256 = null;
-    }
+	constructor(zipPath){
+		super();
+		this.initVars();
 
-    constructor(zipPath){
-        super();
-        this.initVars();
+		this._path = zipPath;
 
-        this._path = zipPath;
+		if(!SFS.fileExists(zipPath)){
+			throw new Error("Couldn't open " + zipPath + ": file not found");
+		}
 
-        if(!SFS.fileExists(zipPath)){
-            throw new Error("Couldn't open "+zipPath+": file not found");
-        }
+		let zip;
 
-        let zip;
+		try{
+			zip = new AdmZip(zipPath);
+		}catch(e){
+			throw new Error("Error opening resource pack: " + zipPath);
+		}
 
-        try{
-            zip = new AdmZip(zipPath);
-        }catch(e){
-            throw new Error("Error opening resource pack: "+zipPath);
-        }
+		let manifest;
 
-        let manifest;
+		if((manifest = zip.readFile("manifest.json")) === null){
+			throw new Error("Could not load resource pack from " + zipPath + ": manifest.json not found in the archive root");
+		}
 
-        if((manifest = zip.readFile("manifest.json")) === null){
-            throw new Error("Could not load resource pack from "+zipPath+": manifest.json not found in the archive root");
-        }
+		this._data = SFS.readFile(zipPath);
 
-        this._data = SFS.readFile(zipPath);
+		zip = null;
 
-        zip = null;
+		manifest = JSON.parse(manifest.toString());
+		if(!ZippedResourcePack.validManifest(manifest)){
+			throw new Error("Could not load resource pack from " + zipPath + ": manifest.json is invalid or incomplete");
+		}
 
-        manifest = JSON.parse(manifest.toString());
-        if(!ZippedResourcePack.validManifest(manifest)){
-            throw new Error("Could not load resource pack from "+zipPath+": manifest.json is invalid or incomplete");
-        }
+		this._manifest = manifest;
+	}
 
-        this._manifest = manifest;
-    }
+	static validManifest(manifest){
+		if(!manifest.format_version || !manifest.header || !manifest.modules){
+			return false;
+		}
 
-    getPackName(){
-        return this._manifest.header.name;
-    }
+		return manifest.header.description &&
+			manifest.header.name &&
+			manifest.header.uuid &&
+			manifest.header.version &&
+			manifest.header.version.length === 3;
+	}
 
-    getPackVersion(){
-        return this._manifest.header.version.join(".");
-    }
+	initVars(){
+		this._path = "";
+		this._data = null;
+		this._manifest = {};
+		this._sha256 = null;
+	}
 
-    getPackId(){
-        return this._manifest.header.uuid;
-    }
+	getPackName(){
+		return this._manifest.header.name;
+	}
 
-    getPackSize(){
-        return SFS.getFileSize(this._path);
-    }
+	getPackVersion(){
+		return this._manifest.header.version.join(".");
+	}
 
-    getSha256(cached = true){
-        if(this._sha256 === null || !cached){
-            this._sha256 = HashFile("sha256", this._path);
-        }
+	getPackId(){
+		return this._manifest.header.uuid;
+	}
 
-        return this._sha256;
-    }
+	getPackSize(){
+		return SFS.getFileSize(this._path);
+	}
 
-    getPackChunk(start, end){
-        return this._data.slice(start, start + end);
-    }
+	getSha256(cached = true){
+		if(this._sha256 === null || !cached){
+			this._sha256 = HashFile("sha256", this._path);
+		}
 
-    static validManifest(manifest){
-        if(!manifest.format_version || !manifest.header || !manifest.modules){
-            return false;
-        }
+		return this._sha256;
+	}
 
-        return manifest.header.description &&
-               manifest.header.name &&
-               manifest.header.uuid &&
-               manifest.header.version &&
-               manifest.header.version.length === 3;
-    }
+	getPackChunk(start, end){
+		return this._data.slice(start, start + end);
+	}
 }
 
 module.exports = ZippedResourcePack;

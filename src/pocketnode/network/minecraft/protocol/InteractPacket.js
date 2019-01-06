@@ -3,13 +3,26 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class InteractPacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.INTERACT_PACKET;
 	}
 
-	static ACTION_LEAVE_VEHICLE(){return 3;}
-	static ACTION_MOUSEOVER(){return 4;}
-	static ACTION_OPEN_INVENTORY(){return 6;}
+	static ACTION_LEAVE_VEHICLE(){
+		return 3;
+	}
+
+	static ACTION_MOUSEOVER(){
+		return 4;
+	}
+
+	static ACTION_OPEN_INVENTORY(){
+		return 6;
+	}
 
 	initVars(){
 		this.action = 0;
@@ -20,14 +33,9 @@ class InteractPacket extends DataPacket {
 		this.z = 0;
 	}
 
-	constructor(){
-		super();
-		this.initVars();
-	}
-
 	_decodePayload(){
 		this.action = this.readByte();
-		this.target = this.getEntityRuntimeId();
+		this.target = this.readEntityRuntimeId();
 
 		if(this.action === InteractPacket.ACTION_MOUSEOVER()){
 			this.x = this.readLFloat();

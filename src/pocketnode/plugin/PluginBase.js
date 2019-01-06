@@ -5,174 +5,184 @@ const PluginLogger = pocketnode("plugin/PluginLogger");
 const Config = pocketnode("utils/Config");
 
 class PluginBase extends Plugin {
-    initVars(){
-        this.loader = {};
-        this.server = {};
+	constructor(){
+		super();
+		this.initVars();
+	}
 
-        this.initialized = false;
-        this.enabled = false;
+	initVars(){
+		this.loader = {};
+		this.server = {};
 
-        this.manifest = {};
+		this.initialized = false;
+		this.enabled = false;
 
-        this.dataFolder = "";
-        this.file = "";
-        this.config = null;
-        this.configFile = null;
+		this.manifest = {};
 
-        this.logger = {};
-    }
+		this.dataFolder = "";
+		this.file = "";
+		this.config = null;
+		this.configFile = null;
 
-    constructor(){
-        super();
-        this.initVars();
-    }
+		this.logger = {};
+	}
 
-    init(loader, server, manifest, dataFolder, file){
-        if(this.initialized === false){
-            this.initialized = true;
-            this.loader = loader;
-            this.server = server;
-            this.manifest = manifest;
-            this.dataFolder = dataFolder;
-            this.file = file;
-            this.configFile = this.dataFolder + "config.json";
-            this.logger = new PluginLogger(server, this);
-        }
-    }
+	init(loader, server, manifest, dataFolder, file){
+		if(this.initialized === false){
+			this.initialized = true;
+			this.loader = loader;
+			this.server = server;
+			this.manifest = manifest;
+			this.dataFolder = dataFolder;
+			this.file = file;
+			this.configFile = this.dataFolder + "config.json";
+			this.logger = new PluginLogger(server, this);
+		}
+	}
 
-    onLoad(){}
-    onEnable(){}
-    onDisable(){}
+	onLoad(){
+	}
 
-    /**
-     * @return Boolean
-     */
-    isEnabled(){
-        return this.enabled === true;
-    }
+	onEnable(){
+	}
 
-    /**
-     * @param tf Boolean
-     */
-    setEnabled(tf){
-        tf = tf || true;
-        tf = tf === true;
-        if(this.enabled !== tf){
-            this.enabled = tf;
-            if(this.enabled === true){
-                this.onEnable();
-            }else{
-                this.onDisable();
-            }
-        }
-    }
+	onDisable(){
+	}
 
-    /**
-     * @return Boolean
-     */
-    isDisabled(){
-        return this.enabled === false;
-    }
+	/**
+	 * @return Boolean
+	 */
+	isEnabled(){
+		return this.enabled === true;
+	}
 
-    getDataFolder(){
-        return this.dataFolder;
-    }
+	/**
+	 * @param tf Boolean
+	 */
+	setEnabled(tf){
+		tf = tf || true;
+		tf = tf === true;
+		if(this.enabled !== tf){
+			this.enabled = tf;
+			if(this.enabled === true){
+				this.onEnable();
+			}else{
+				this.onDisable();
+			}
+		}
+	}
 
+	/**
+	 * @return Boolean
+	 */
+	isDisabled(){
+		return this.enabled === false;
+	}
 
-    getManifset(){
-        return this.manifest;
-    }
+	getDataFolder(){
+		return this.dataFolder;
+	}
 
-    getLogger(){
-        return this.logger;
-    }
+	getManifset(){
+		return this.manifest;
+	}
 
-    isInitialized(){
-        return this.initialized === true;
-    }
+	getLogger(){
+		return this.logger;
+	}
 
-    resourceExists(name){
-        name = name.replace("\\", "/").trim();
-        let path = this.file + "resources/" + name;
+	isInitialized(){
+		return this.initialized === true;
+	}
 
-        return FileSystem.existsSync(path);
-    }
+	resourceExists(name){
+		name = name.replace("\\", "/").trim();
+		let path = this.file + "resources/" + name;
 
-    getResource(name){
-        name = name.replace("\\", "/").trim();
-        let path = this.file + "resources/" + name;
+		return FileSystem.existsSync(path);
+	}
 
-        if(this.resourceExists(name)){
-            return FileSystem.readFileSync(path, {encoding: "utf-8"});
-        }
+	getResource(name){
+		name = name.replace("\\", "/").trim();
+		let path = this.file + "resources/" + name;
 
-        return null;
-    }
+		if(this.resourceExists(name)){
+			return FileSystem.readFileSync(path, {encoding: "utf-8"});
+		}
 
-    saveResource(name, replace){
-        replace = replace || false;
+		return null;
+	}
 
-        if(name.trim() === "") return false;
-        if(!this.resourceExists(name)) return false;
+	saveResource(name, replace){
+		replace = replace || false;
 
-        let output = this.dataFolder + name;
-        if(!FileSystem.existsSync(this.dataFolder)) FileSystem.mkdirSync(this.dataFolder);
+		if(name.trim() === ""){
+			return false;
+		}
+		if(!this.resourceExists(name)){
+			return false;
+		}
 
-        if(FileSystem.existsSync(output) && replace !== true){
-            return false;
-        }
+		let output = this.dataFolder + name;
+		if(!FileSystem.existsSync(this.dataFolder)){
+			FileSystem.mkdirSync(this.dataFolder);
+		}
 
-        FileSystem.copyFileSync(this.file + "resources/" + name, output);
+		if(FileSystem.existsSync(output) && replace !== true){
+			return false;
+		}
 
-        return true;
-    }
+		FileSystem.copyFileSync(this.file + "resources/" + name, output);
 
-    getConfig(){
-        if(this.config === null){
-            this.reloadConfig();
-        }
+		return true;
+	}
 
-        return this.config;
-    }
+	getConfig(){
+		if(this.config === null){
+			this.reloadConfig();
+		}
 
-    saveConfig(){
-        this.getConfig().save();
-    }
+		return this.config;
+	}
 
-    saveDefaultConfig(){
-        if(!FileSystem.existsSync(this.configFile)){
-            return this.saveResource("config.json");
-        }
+	saveConfig(){
+		this.getConfig().save();
+	}
 
-        return false;
-    }
+	saveDefaultConfig(){
+		if(!FileSystem.existsSync(this.configFile)){
+			return this.saveResource("config.json");
+		}
 
-    reloadConfig(){
-        this.config = new Config(this.configFile, Config.JSON);
-        if(this.resourceExists("config.json")){
-            this.getConfig().setDefaults(JSON.parse(this.getResource("config.json")));
-        }
-    }
+		return false;
+	}
 
-    getServer(){
-        return this.server;
-    }
+	reloadConfig(){
+		this.config = new Config(this.configFile, Config.JSON);
+		if(this.resourceExists("config.json")){
+			this.getConfig().setDefaults(JSON.parse(this.getResource("config.json")));
+		}
+	}
 
-    getName(){
-        return this.manifest.getName();
-    }
+	getServer(){
+		return this.server;
+	}
 
-    getFullName(){
-        return this.manifest.getFullName();
-    }
+	getName(){
+		return this.manifest.getName();
+	}
 
-    getPluginLoader(){
-        return this.loader;
-    }
+	getFullName(){
+		return this.manifest.getFullName();
+	}
 
-    getManifest(){
-        return this.manifest;
-    }
+	getPluginLoader(){
+		return this.loader;
+	}
+
+	getManifest(){
+		return this.manifest;
+	}
 }
 
 module.exports = PluginBase;

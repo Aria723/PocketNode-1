@@ -1,14 +1,16 @@
 const AcknowledgementPacket = raknet("protocol/AcknowledgementPacket");
 
 class ACK extends AcknowledgementPacket {
-    static getId(){
-        return 0xc0;
-    }
+	constructor(stream){
+		super();
+		if(stream){
+			this.stream = stream;
+		}
+	}
 
-    constructor(stream){
-        super();
-        if(stream)this.stream = stream;
-    }
+	static getId(){
+		return 0xc0;
+	}
 }
 
 module.exports = ACK;

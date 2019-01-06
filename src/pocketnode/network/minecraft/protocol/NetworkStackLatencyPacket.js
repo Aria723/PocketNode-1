@@ -1,7 +1,12 @@
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
-class NetworkStackLatencyPacket  extends DataPacket {
+class NetworkStackLatencyPacket extends DataPacket {
+
+	constructor(){
+		super();
+		this.initVars();
+	}
 
 	static getId(){
 		return MinecraftInfo.NETWORK_STACK_LATENCY_PACKET;
@@ -9,11 +14,6 @@ class NetworkStackLatencyPacket  extends DataPacket {
 
 	initVars(){
 		this.timestamp = 0;
-	}
-
-	constructor(){
-		super();
-		this.initVars();
 	}
 
 	_decodePayload(){

@@ -2,35 +2,35 @@ const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class DisconnectPacket extends DataPacket {
-    static getId(){
-        return MinecraftInfo.DISCONNECT_PACKET;
-    }
+	constructor(){
+		super();
+		this.initVars();
+	}
 
-    initVars(){
-        this.hideDisconnectionScreen = false;
-        this.message = "";
-    }
+	static getId(){
+		return MinecraftInfo.DISCONNECT_PACKET;
+	}
 
-    constructor(){
-        super();
-        this.initVars();
-    }
+	initVars(){
+		this.hideDisconnectionScreen = false;
+		this.message = "";
+	}
 
-    canBeSentBeforeLogin(){
-        return true;
-    }
+	canBeSentBeforeLogin(){
+		return true;
+	}
 
-    _decodePayload(){
-        this.hideDisconnectionScreen = this.readBool();
-        this.message = this.readString();
-    }
+	_decodePayload(){
+		this.hideDisconnectionScreen = this.readBool();
+		this.message = this.readString();
+	}
 
-    _encodePayload(){
-        this.writeBool(this.hideDisconnectionScreen);
-        if(!this.hideDisconnectionScreen){
-            this.writeString(this.message);
-        }
-    }
+	_encodePayload(){
+		this.writeBool(this.hideDisconnectionScreen);
+		if(!this.hideDisconnectionScreen){
+			this.writeString(this.message);
+		}
+	}
 }
 
 module.exports = DisconnectPacket;

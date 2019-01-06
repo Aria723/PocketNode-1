@@ -8,9 +8,9 @@ const FileSystem = require("fs");
  * @param buffer {boolean} return buffer
  */
 function HashFile(algo, path, buffer = false){
-    let hash = Crypto.createHash(algo);
-    hash.update(FileSystem.readFileSync(path));
-    return buffer === true ? hash.digest() : hash.digest("hex");
+	let hash = Crypto.createHash(algo);
+	hash.update(FileSystem.readFileSync(path));
+	return buffer === true ? hash.digest() : hash.digest("hex");
 }
 
 module.exports = HashFile;

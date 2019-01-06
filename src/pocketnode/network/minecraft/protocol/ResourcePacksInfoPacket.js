@@ -2,42 +2,42 @@ const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ResourcePacksInfoPacket extends DataPacket {
-    static getId(){
-        return MinecraftInfo.RESOURCE_PACKS_INFO_PACKET;
-    }
+	constructor(){
+		super();
+		this.initVars();
+	}
 
-    initVars(){
-        this.mustAccept = false;
-        this.behaviorPackEntries = [];
-        this.resourcePackEntries = [];
-    }
+	static getId(){
+		return MinecraftInfo.RESOURCE_PACKS_INFO_PACKET;
+	}
 
-    constructor(){
-        super();
-        this.initVars();
-    }
+	initVars(){
+		this.mustAccept = false;
+		this.behaviorPackEntries = [];
+		this.resourcePackEntries = [];
+	}
 
-    _encodePayload(){
-        this.writeBool(this.mustAccept);
-        this.writeLShort(this.behaviorPackEntries.length);
-        this.behaviorPackEntries.forEach(entry => {
-            this.writeString(entry.getPackId())
-                .writeString(entry.getPackVersion())
-                .writeLLong(entry.getPackSize())
-                .writeString("")
-                .writeString("")
-                .writeString("");
-        });
-        this.writeLShort(this.resourcePackEntries.length);
-        this.resourcePackEntries.forEach(entry => {
-            this.writeString(entry.getPackId())
-                .writeString(entry.getPackVersion())
-                .writeLLong(entry.getPackSize())
-                .writeString("")
-                .writeString("")
-                .writeString("");
-        });
-    }
+	_encodePayload(){
+		this.writeBool(this.mustAccept);
+		this.writeLShort(this.behaviorPackEntries.length);
+		this.behaviorPackEntries.forEach(entry => {
+			this.writeString(entry.getPackId())
+				.writeString(entry.getPackVersion())
+				.writeLLong(entry.getPackSize())
+				.writeString("")
+				.writeString("")
+				.writeString("");
+		});
+		this.writeLShort(this.resourcePackEntries.length);
+		this.resourcePackEntries.forEach(entry => {
+			this.writeString(entry.getPackId())
+				.writeString(entry.getPackVersion())
+				.writeLLong(entry.getPackSize())
+				.writeString("")
+				.writeString("")
+				.writeString("");
+		});
+	}
 }
 
 module.exports = ResourcePacksInfoPacket;

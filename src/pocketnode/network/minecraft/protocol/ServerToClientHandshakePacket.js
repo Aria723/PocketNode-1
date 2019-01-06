@@ -3,6 +3,11 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ServerToClientHandshakePacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.SERVER_TO_CLIENT_HANDSHAKE_PACKET;
 	}
@@ -13,11 +18,6 @@ class ServerToClientHandshakePacket extends DataPacket {
 
 	initVars(){
 		this.jwt = "";
-	}
-
-	constructor(){
-		super();
-		this.initVars();
 	}
 
 	_decodePayload(){

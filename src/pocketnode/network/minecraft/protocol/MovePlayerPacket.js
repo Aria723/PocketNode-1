@@ -3,14 +3,30 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class MovePlayerPacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.MOVE_PLAYER_PACKET;
 	}
 
-	static MODE_NORMAL(){return 0;}
-	static MODE_RESET(){return 1;}
-	static MODE_TELEPORT(){return 2;}
-	static MODE_PITCH(){return 3;}
+	static MODE_NORMAL(){
+		return 0;
+	}
+
+	static MODE_RESET(){
+		return 1;
+	}
+
+	static MODE_TELEPORT(){
+		return 2;
+	}
+
+	static MODE_PITCH(){
+		return 3;
+	}
 
 	initVars(){
 		this.entityRuntimeId = 0;
@@ -25,20 +41,15 @@ class MovePlayerPacket extends DataPacket {
 		this.teleportItem = 0;
 	}
 
-	constructor(){
-		super();
-		this.initVars();
-	}
-
 	_decodePayload(){
-		this.entityRuntimeId = this.getEntityRuntimeId();
-		this.position = this.getVector3Obj();
+		this.entityRuntimeId = this.readEntityRuntimeId();
+		this.position = this.readVector3Obj();
 		this.pitch = this.readLFloat();
 		this.yaw = this.readLFloat();
 		this.headYaw = this.readLFloat();
 		this.mode = this.readByte();
 		this.onGround = this.readBool();
-		this.ridingEId = this.getEntityRuntimeId();
+		this.ridingEId = this.readEntityRuntimeId();
 		if(this.mode === MovePlayerPacket.MODE_TELEPORT()){
 			this.teleportCause = this.readLInt();
 			this.teleportItem = this.readLInt();

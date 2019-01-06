@@ -3,6 +3,11 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ScriptCustomEventPacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.SCRIPT_CUSTOM_EVENT_PACKET;
 	}
@@ -10,11 +15,6 @@ class ScriptCustomEventPacket extends DataPacket {
 	initVars(){
 		this.eventName = "";
 		this.eventData = "";
-	}
-
-	constructor(){
-		super();
-		this.initVars();
 	}
 
 	_decodePayload(){

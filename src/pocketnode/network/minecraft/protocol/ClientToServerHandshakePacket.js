@@ -3,16 +3,16 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ClientToServerHandshakePacket extends DataPacket {
 
+	constructor(){
+		super();
+	}
+
 	static getId(){
 		return MinecraftInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET;
 	}
 
 	canBeSentBeforeLogin(){
 		return true;
-	}
-
-	constructor(){
-		super();
 	}
 
 	_decodePayload(){

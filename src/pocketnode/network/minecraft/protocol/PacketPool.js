@@ -18,43 +18,43 @@ const InteractPacket = pocketnode("network/minecraft/protocol/InteractPacket");
 const MovePlayerPacket = pocketnode("network/minecraft/protocol/MovePlayerPacket");
 
 class PacketPool {
-    constructor(){
-        this.packetPool = new Map();
-        this.registerPackets();
-    }
+	constructor(){
+		this.packetPool = new Map();
+		this.registerPackets();
+	}
 
-    registerPacket(packet){
-        this.packetPool.set(packet.getId(), packet);
-    }
+	registerPacket(packet){
+		this.packetPool.set(packet.getId(), packet);
+	}
 
-    getPacket(id){
-        return this.packetPool.has(id) ? new (this.packetPool.get(id))() : null;
-    }
+	getPacket(id){
+		return this.packetPool.has(id) ? new (this.packetPool.get(id))() : null;
+	}
 
-    isRegistered(id){
-        return this.packetPool.has(id);
-    }
+	isRegistered(id){
+		return this.packetPool.has(id);
+	}
 
-    registerPackets(){
-        this.registerPacket(LoginPacket);
-        this.registerPacket(PlayStatusPacket);
-        this.registerPacket(ServerToClientHandshakePacket);
-        this.registerPacket(ClientToServerHandshakePacket);
-        this.registerPacket(DisconnectPacket);
-        this.registerPacket(ResourcePacksInfoPacket);
-        this.registerPacket(ResourcePackClientResponsePacket);
-        this.registerPacket(ResourcePackChunkRequestPacket);
-        this.registerPacket(RequestChunkRadiusPacket);
-        this.registerPacket(TextPacket);
-        this.registerPacket(ScriptCustomEventPacket);
-        this.registerPacket(SetScoreboardIdentityPacket);
-        this.registerPacket(SetScorePacket);
-        this.registerPacket(SpawnParticleEffectPacket);
-        this.registerPacket(UpdateSoftEnumPacket);
-        this.registerPacket(NetworkStackLatencyPacket);
-        this.registerPacket(InteractPacket);
-        this.registerPacket(MovePlayerPacket);
-    }
+	registerPackets(){
+		this.registerPacket(LoginPacket);
+		this.registerPacket(PlayStatusPacket);
+		this.registerPacket(ServerToClientHandshakePacket);
+		this.registerPacket(ClientToServerHandshakePacket);
+		this.registerPacket(DisconnectPacket);
+		this.registerPacket(ResourcePacksInfoPacket);
+		this.registerPacket(ResourcePackClientResponsePacket);
+		this.registerPacket(ResourcePackChunkRequestPacket);
+		this.registerPacket(RequestChunkRadiusPacket);
+		this.registerPacket(TextPacket);
+		this.registerPacket(ScriptCustomEventPacket);
+		this.registerPacket(SetScoreboardIdentityPacket);
+		this.registerPacket(SetScorePacket);
+		this.registerPacket(SpawnParticleEffectPacket);
+		this.registerPacket(UpdateSoftEnumPacket);
+		this.registerPacket(NetworkStackLatencyPacket);
+		this.registerPacket(InteractPacket);
+		this.registerPacket(MovePlayerPacket);
+	}
 }
 
 module.exports = PacketPool;

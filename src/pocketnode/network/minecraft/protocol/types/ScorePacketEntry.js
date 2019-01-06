@@ -1,8 +1,20 @@
 class ScorePacketEntry {
 
-	static TYPE_PLAYER(){return 1;}
-	static TYPE_ENTITY(){return 2;}
-	static TYPE_FAKE_PLAYER(){return 3;}
+	constructor(){
+		this.initVars();
+	}
+
+	static TYPE_PLAYER(){
+		return 1;
+	}
+
+	static TYPE_ENTITY(){
+		return 2;
+	}
+
+	static TYPE_FAKE_PLAYER(){
+		return 3;
+	}
 
 	initVars(){
 		this.scoreboardId = 0;
@@ -14,8 +26,6 @@ class ScorePacketEntry {
 		this.entityUniqueId = null;
 		this.customName = null;
 	}
-
-	constructor(){
-		this.initVars();
-	}
 }
+
+module.exports = ScorePacketEntry;

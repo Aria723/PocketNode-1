@@ -3,6 +3,11 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class UpdateSoftEnumPacket extends DataPacket {
 
+	constructor(){
+		super();
+		this.initVars();
+	}
+
 	static getId(){
 		return MinecraftInfo.UPDATE_SOFT_ENUM_PACKET;
 	}
@@ -11,11 +16,6 @@ class UpdateSoftEnumPacket extends DataPacket {
 		this.enumName = "";
 		this.values = [];
 		this.type = 0;
-	}
-
-	constructor(){
-		super();
-		this.initVars();
 	}
 
 	_decodePayload(){
