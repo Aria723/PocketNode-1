@@ -6,7 +6,7 @@ set /A "loops=1"
 where node >nul 2>&1 && goto startScript || (
 echo You require Node.js to run this program!
 echo Download it from https://nodejs.org/en/ and try again!
-pause>nul & exit
+PAUSE
 )
 
 :startScript
@@ -19,4 +19,4 @@ if /i "%loop%"=="true" (
     ping localhost -n 5 >nul
     goto startScript
 )
-pause>nul & exit
+PAUSE
