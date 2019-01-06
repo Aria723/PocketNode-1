@@ -19,8 +19,6 @@ const GameRule = pocketnode("level/GameRule");
 
 const Vector3 = pocketnode("math/Vector3");
 
-const Skin = pocketnode("entity/Skin");
-
 const TextFormat = pocketnode("utils/TextFormat");
 const Base64 = pocketnode("utils/Base64");
 
@@ -143,10 +141,10 @@ class Player extends CommandSender {
         this._displayName = this._username;
         this._iusername = this._username.toLowerCase();
 
-        //todo: add kick
-        //if(this.server.isFull() && this.kick("Server Full", false)){
-        //    return true;
-        //}
+        if(this.server.isFull()){
+	        this.kick("Server Full", false);
+            return true;
+        }
 
         this._randomClientId = packet.clientId;
 

@@ -28,8 +28,6 @@ class LoginPacket extends DataPacket {
         this.chainData = [];
         this.clientDataJwt = "";
         this.clientData = [];
-
-        this.stream = null;
     }
 
     constructor(){
@@ -49,8 +47,6 @@ class LoginPacket extends DataPacket {
         this.protocol = this.readInt();
 
         let stream = new BinaryStream(this.read(this.readUnsignedVarInt()));
-        //let stream = new BinaryStream(this.readString());
-	    this.stream = stream;
         this.chainData = JSON.parse(stream.read(stream.readLInt()).toString());
 
         this.chainData.chain.forEach(chain => {
