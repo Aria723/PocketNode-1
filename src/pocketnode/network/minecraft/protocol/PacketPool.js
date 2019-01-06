@@ -14,6 +14,8 @@ const SetScorePacket = pocketnode("network/minecraft/protocol/SetScorePacket");
 const SpawnParticleEffectPacket = pocketnode("network/minecraft/protocol/SpawnParticleEffectPacket");
 const UpdateSoftEnumPacket = pocketnode("network/minecraft/protocol/UpdateSoftEnumPacket");
 const NetworkStackLatencyPacket = pocketnode("network/minecraft/protocol/NetworkStackLatencyPacket");
+const InteractPacket = pocketnode("network/minecraft/protocol/InteractPacket");
+const MovePlayerPacket = pocketnode("network/minecraft/protocol/MovePlayerPacket");
 
 class PacketPool {
     constructor(){
@@ -50,6 +52,8 @@ class PacketPool {
         this.registerPacket(SpawnParticleEffectPacket);
         this.registerPacket(UpdateSoftEnumPacket);
         this.registerPacket(NetworkStackLatencyPacket);
+        this.registerPacket(InteractPacket);
+        this.registerPacket(MovePlayerPacket);
     }
 }
 

@@ -1,6 +1,6 @@
 const UUID = pocketnode("utils/UUID");
 
-class NetworkBinaryStream extends require("pocketnode-binarystream") {
+class NetworkBinaryStream extends binarystream("BinaryStream") {
     /**
      * @return {string}
      */

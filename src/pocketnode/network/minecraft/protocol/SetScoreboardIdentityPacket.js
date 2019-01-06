@@ -28,7 +28,7 @@ class SetScoreboardIdentityPacket extends DataPacket {
 		for(let i = 0; i < count; i++){
 			let entry = new ScoreboardEntry();
 			entry.scoreboardId = this.readVarLong();
-			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY){
+			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY()){
 				entry.entityUniqueId = this.getEntityUniqueId();
 			}
 			this.entries.push(entry);
@@ -41,7 +41,7 @@ class SetScoreboardIdentityPacket extends DataPacket {
 		for(let i = 0; i < this.entries.length; i++){
 			let entry = this.entries[i];
 			this.writeVarLong(entry.scoreboardId);
-			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY){
+			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY()){
 				this.writeEntityUniqueId(entry.entityUniqueId);
 			}
 		}

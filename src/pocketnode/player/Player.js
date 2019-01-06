@@ -12,6 +12,8 @@ const StartGamePacket = pocketnode("network/minecraft/protocol/StartGamePacket")
 const ChunkRadiusUpdatedPacket = pocketnode("network/minecraft/protocol/ChunkRadiusUpdatedPacket");
 const TextPacket = pocketnode("network/minecraft/protocol/TextPacket");
 const FullChunkDataPacket =  pocketnode("network/minecraft/protocol/FullChunkDataPacket");
+const MovePlayerPacket =  pocketnode("network/minecraft/protocol/MovePlayerPacket");
+const DimensionIds =  pocketnode("network/minecraft/protocol/types/DimensionIds");
 
 const DataPacketSendEvent = pocketnode("event/server/DataPacketSendEvent");
 
@@ -49,6 +51,7 @@ class Player extends CommandSender {
         this.creationTime = 0;
 
         this._randomClientId = 0;
+        this._id = 0;
 
         this._ip = "";
         this._port = 0;
@@ -63,7 +66,7 @@ class Player extends CommandSender {
 
         this._needACK = {};
     }
-    
+
     constructor(server, clientId, ip, port){
         super(server);
         this.initVars();
@@ -73,6 +76,8 @@ class Player extends CommandSender {
         this.creationTime = Date.now();
 
         this._sessionAdapter = new PlayerSessionAdapter(this);
+
+        this._id = server._entityCount++;
     }
 
     getLeaveMessage(){
@@ -85,7 +90,7 @@ class Player extends CommandSender {
     isConnected(){
         return this._sessionAdapter !== null;
     }
-    
+
     static isValidUserName(name){
         return name.toLowerCase() !== "rcon" && name.toLowerCase() !== "console" && name.length >= 1 && name.length <= 16 && /[^0-9a-bA-B\s]/gi.test(name);
     }
@@ -116,6 +121,10 @@ class Player extends CommandSender {
 
     getPort(){
         return this._port;
+    }
+
+    getId(){
+    	return this._id;
     }
 
     handleLogin(packet){
@@ -259,7 +268,7 @@ class Player extends CommandSender {
 
                 info.valid = true;
             }();
-            
+
             return info;
         }.bind(this))
             .then(function(info){
@@ -453,48 +462,15 @@ class Player extends CommandSender {
         ].join(" "));
 
         let pk = new StartGamePacket();
+        pk.entityUniqueId = this.getId();
+        pk.entityRuntimeId = this.getId();
         pk.playerGamemode = this.server.getGamemode(); //todo?
         pk.playerPosition = new Vector3(0, 20, 0);
-        pk.seed = 0xdeadbeef;
-        pk.generator = 2;
-        pk.levelGamemode = 1;
-        [pk.spawnX, pk.spawnY, pk.spawnZ] = [0, 5, 0];
-        pk.isMultiplayerGame = true;
-        pk.hasXboxLiveBroadcast = false;
-        pk.hasLANBroadcast = true;
-        pk.commandsEnabled = true;
-        pk.gameRules = [];
-        pk.hasBonusChestEnabled = false;
-        pk.hasStartWithMapEnabled = false;
-        pk.hasTrustPlayersEnabled = true;
-        pk.xboxLiveBroadcastMode = 0;
-        pk.levelName = this.server.getMotd();
-        pk.currentTick = this.server.getCurrentTick();
-        pk.enchantmentSeed = 123456;
-        pk.time = 0;
-        pk.hasAchievementsDisabled = true;
-        //pk.gameRules = this.getServer().getDefaultLevel().getGameRules();
-        pk.gameRules = [
-            new GameRule(GameRule.COMMAND_BLOCK_OUTPUT, true),
-            new GameRule(GameRule.DO_DAYLIGHT_CYCLE, true),
-            new GameRule(GameRule.DO_ENTITY_DROPS, true),
-            new GameRule(GameRule.DO_FIRE_TICK, true),
-            new GameRule(GameRule.DO_MOB_LOOT, true),
-            new GameRule(GameRule.DO_MOB_SPAWNING, true),
-            new GameRule(GameRule.DO_TILE_DROPS, true),
-            new GameRule(GameRule.DO_WEATHER_CYCLE, true),
-            new GameRule(GameRule.DROWNING_DAMAGE, true),
-            new GameRule(GameRule.FALL_DAMAGE, true),
-            new GameRule(GameRule.FIRE_DAMAGE, true),
-            new GameRule(GameRule.KEEP_INVENTORY, false),
-            new GameRule(GameRule.MOB_GRIEFING, true),
-            new GameRule(GameRule.NATURAL_REGENERATION, true),
-            new GameRule(GameRule.PVP, true),
-            new GameRule(GameRule.SEND_COMMAND_FEEDBACK, true),
-            new GameRule(GameRule.SHOW_COORDINATES, true),
-            new GameRule(GameRule.RANDOM_TICK_SPEED, 3),
-            new GameRule(GameRule.TNT_EXPLODES, true)
-        ];
+        pk.dimension = DimensionIds.OVERWORLD;
+        pk.worldGamemode = 1;
+        pk.difficulty = 0;
+        pk.spawnY = 5;
+        pk.worldName = this.getServer().getMotd();
         this.dataPacket(pk);
 
         this.server.addOnlinePlayer(this);
@@ -511,7 +487,7 @@ class Player extends CommandSender {
         //this.resetCraftingGridType();
 
         message = TextFormat.clean(message, false);//this._removeFormat);
-        
+
         message = message.split("\n");
         for(let i in message){
             let messagePart = message[i];
@@ -533,6 +509,12 @@ class Player extends CommandSender {
         return true;
     }
 
+    handleMovePlayer(packet){
+	    CheckTypes([MovePlayerPacket, packet]);
+	    // TODO
+	    return true;
+    }
+
     sendMessage(message){
         let pk = new TextPacket();
         pk.type = TextPacket.TYPE_RAW;
@@ -547,7 +529,7 @@ class Player extends CommandSender {
         pk.data = chunk.toBinary();
         this.dataPacket(pk);
     }
-    
+
     /**
      * @return {PlayerSessionAdapter}
      */

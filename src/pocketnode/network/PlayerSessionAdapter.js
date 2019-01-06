@@ -8,6 +8,7 @@ const ResourcePackChunkRequestPacket = pocketnode("network/minecraft/protocol/Re
 const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkDataPacket");
 const RequestChunkRadiusPacket = pocketnode("network/minecraft/protocol/RequestChunkRadiusPacket");
 const PlayStatusPacket = pocketnode("network/minecraft/protocol/PlayStatusPacket");
+const InteractPacket = pocketnode("network/minecraft/protocol/InteractPacket");
 
 const DataPacketReceiveEvent = pocketnode("event/server/DataPacketReceiveEvent");
 
@@ -206,6 +207,17 @@ class PlayerSessionAdapter {
 
 	handleNetworkStackLatency(packet){
         return false;
+    }
+
+	handleInteract(packet){
+        if(packet.action === InteractPacket.ACTION_MOUSEOVER() && packet.target === 0){
+            return true;
+        }
+        return false;
+    }
+
+	handleMovePlayer(packet){
+        return this.player.handleMovePlayer(packet);
     }
 
     toString(){

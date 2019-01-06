@@ -1,5 +1,6 @@
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
+const PermissionLevel = pocketnode("permission/PermissionLevel");
 
 class StartGamePacket extends DataPacket {
     static getId(){
@@ -20,7 +21,7 @@ class StartGamePacket extends DataPacket {
         this.seed = 0;
         this.dimension = 0;
         this.generator = 1; //default infinite - 0 old, 1 infinite, 2 flat
-        this.levelGamemode = 0;
+        this.worldGamemode = 0;
         this.difficulty = 0;
         this.spawnX = 0;
         this.spawnY = 0;
@@ -42,25 +43,26 @@ class StartGamePacket extends DataPacket {
         this.hasBonusChestEnabled = false;
         this.hasStartWithMapEnabled = false;
         this.hasTrustPlayersEnabled = false;
-        this.defaultPlayerPermission = 1;//PlayerPermissions::MEMBER; //TODO
+        this.defaultPlayerPermission = PermissionLevel.MEMBER;
         this.xboxLiveBroadcastMode = 0; //TODO: find values
-        this.xboxLiveBroadcastIntent = false;
+	    this.serverChunkTickRadius = 4;
+	    this.hasPlatformBroadcast = false;
+	    this.platformBroadcastMode = 0;
+	    this.xboxLiveBroadcastIntent = false;
         this.hasLockedBehaviorPack = false;
         this.hasLockedResourcePack = false;
         this.isFromLockedWorldTemplate = false;
         this.useMsaGamertagsOnly = false;
         this.isFromWorldTemplate = false;
         this.isWorldTemplateOptionLocked = false;
-	    this.serverChunkTickRadius = 4;
 
         this.levelId = ""; //base64 string, usually the same as world folder name in vanilla
-
-        this.levelName = "";
-
+        this.worldName = "";
         this.premiumWorldTemplateId = "";
-        this.unknownBool = false;
+        this.isTrial = false;
         this.currentTick = 0;
         this.enchantmentSeed = 0;
+        this.multiplayerCorrelationId = "";
     }
 
     constructor(){
@@ -82,7 +84,7 @@ class StartGamePacket extends DataPacket {
         this.seed = this.readVarInt();
         this.dimension = this.readVarInt();
         this.generator = this.readVarInt();
-        this.levelGamemode = this.readVarInt();
+        this.worldGamemode = this.readVarInt();
         this.difficulty = this.readVarInt();
         [this.spawnX, this.spawnY, this.spawnZ] = this.getBlockPosition();
         this.hasAchievementsDisabled = this.readBool();
@@ -102,6 +104,9 @@ class StartGamePacket extends DataPacket {
         this.hasTrustPlayersEnabled = this.readBool();
         this.defaultPlayerPermission = this.readVarInt();
         this.xboxLiveBroadcastMode = this.readVarInt();
+	    this.serverChunkTickRadius = this.readLInt();
+	    this.hasPlatformBroadcast = this.readBool();
+	    this.platformBroadcastMode = this.readVarInt();
 	    this.xboxLiveBroadcastIntent = this.readBool();
         this.hasLockedBehaviorPack = this.readBool();
         this.hasLockedResourcePack = this.readBool();
@@ -109,15 +114,22 @@ class StartGamePacket extends DataPacket {
         this.useMsaGamertagsOnly = this.readBool();
         this.isFromWorldTemplate = this.readBool();
         this.isWorldTemplateOptionLocked = this.readBool();
-        this.serverChunkTickRadius = this.readLInt();
 
         this.levelId = this.readString();
-        this.levelName = this.readString();
+        this.worldName = this.readString();
         this.premiumWorldTemplateId = this.readString();
-        this.unknownBool = this.readBool();
+        this.isTrial = this.readBool();
         this.currentTick = this.readLLong();
 
         this.enchantmentSeed = this.readVarInt();
+
+        let count = this.readUnsignedVarInt();
+        for(let i = 0; I < count; i++){
+            this.readString();
+            this.readLShort();
+        }
+
+        this.multiplayerCorrelationId = this.readString();
     }
 
     _encodePayload(){
@@ -127,48 +139,52 @@ class StartGamePacket extends DataPacket {
 
         this.writeVector3Obj(this.playerPosition);
 
-        this.writeLFloat(this.pitch)
-            .writeLFloat(this.yaw);
+        this.writeLFloat(this.pitch);
+        this.writeLFloat(this.yaw);
 
-        this.writeVarInt(this.seed)
-            .writeVarInt(this.dimension)
-            .writeVarInt(this.generator)
-            .writeVarInt(this.levelGamemode)
-            .writeVarInt(this.difficulty)
-            .writeBlockPosition(this.spawnX, this.spawnY, this.spawnZ)
-            .writeBool(this.hasAchievementsDisabled)
-            .writeVarInt(this.time)
-            .writeBool(this.eduMode)
-            .writeBool(this.hasEduFeaturesEnabled)
-            .writeLFloat(this.rainLevel)
-            .writeLFloat(this.lightningLevel)
-            .writeBool(this.isMultiplayerGame)
-            .writeBool(this.hasLANBroadcast)
-            .writeBool(this.hasXboxLiveBroadcast)
-            .writeBool(this.commandsEnabled)
-            .writeBool(this.isTexturePacksRequired)
-            .writeGameRules(this.gameRules)
-            .writeBool(this.hasBonusChestEnabled)
-            .writeBool(this.hasStartWithMapEnabled)
-            .writeBool(this.hasTrustPlayersEnabled)
-            .writeVarInt(this.defaultPlayerPermission)
-            .writeVarInt(this.xboxLiveBroadcastMode)
-            .writeVarInt(this.xboxLiveBroadcastIntent)
-            .writeVarInt(this.hasLockedBehaviorPack)
-            .writeVarInt(this.hasLockedResourcePack)
-            .writeVarInt(this.isFromLockedWorldTemplate)
-            .writeBool(this.useMsaGamertagsOnly)
-            .writeBool(this.isFromWorldTemplate)
-            .writeBool(this.isWorldTemplateOptionLocked)
-            .writeLInt(this.serverChunkTickRadius);
+        this.writeVarInt(this.seed);
+        this.writeVarInt(this.dimension);
+        this.writeVarInt(this.generator);
+        this.writeVarInt(this.worldGamemode);
+        this.writeVarInt(this.difficulty);
+        this.writeBlockPosition(this.spawnX, this.spawnY, this.spawnZ);
+        this.writeBool(this.hasAchievementsDisabled);
+        this.writeVarInt(this.time);
+        this.writeBool(this.eduMode);
+        this.writeBool(this.hasEduFeaturesEnabled);
+        this.writeLFloat(this.rainLevel);
+        this.writeLFloat(this.lightningLevel);
+        this.writeBool(this.isMultiplayerGame);
+        this.writeBool(this.hasLANBroadcast);
+        this.writeBool(this.hasXboxLiveBroadcast);
+        this.writeBool(this.commandsEnabled);
+        this.writeBool(this.isTexturePacksRequired);
+        this.writeGameRules(this.gameRules);
+        this.writeBool(this.hasBonusChestEnabled);
+        this.writeBool(this.hasStartWithMapEnabled);
+        this.writeBool(this.hasTrustPlayersEnabled);
+        this.writeVarInt(this.defaultPlayerPermission);
+        this.writeVarInt(this.xboxLiveBroadcastMode);
+	    this.writeLInt(this.serverChunkTickRadius);
+	    this.writeBool(this.hasPlatformBroadcast);
+	    this.writeVarInt(this.platformBroadcastMode);
+        this.writeVarInt(this.xboxLiveBroadcastIntent);
+        this.writeVarInt(this.hasLockedBehaviorPack);
+        this.writeVarInt(this.hasLockedResourcePack);
+        this.writeVarInt(this.isFromLockedWorldTemplate);
+        this.writeBool(this.useMsaGamertagsOnly);
+        this.writeBool(this.isFromWorldTemplate);
+        this.writeBool(this.isWorldTemplateOptionLocked);
 
-        this.writeString(this.levelId)
-            .writeString(this.levelName)
-            .writeString(this.premiumWorldTemplateId)
-            .writeBool(this.unknownBool)
-            .writeLLong(this.currentTick);
+        this.writeString(this.levelId);
+        this.writeString(this.worldName);
+	    this.writeString(this.premiumWorldTemplateId);
+	    this.writeBool(this.isTrial);
+	    this.writeLLong(this.currentTick);
 
         this.writeVarInt(this.enchantmentSeed);
+
+        this.writeString(this.multiplayerCorrelationId);
     }
 }
 

@@ -5,8 +5,14 @@ const Path = require("path");
  * @param path {string}
  * @return {*}
  */
+global.binarystream = function(path){
+	return require(Path.normalize(__dirname + "/../../../binarystream/" + path));
+};
 global.pocketnode = function(path){
     return require(Path.normalize(__dirname + "/../../" + path));
+};
+global.raknet = function(path){
+    return require(Path.normalize(__dirname + "/../../../raknet/" + path));
 };
 
 const SFS = pocketnode("utils/SimpleFileSystem");

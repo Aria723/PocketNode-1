@@ -30,14 +30,14 @@ class SetScorePacket extends DataPacket {
 			entry.scoreboardId = this.readVarLong();
 			entry.objectiveName = this.readString();
 			entry.score = this.readLInt();
-			if(this.type === SetScorePacket.TYPE_CHANGE){
+			if(this.type === SetScorePacket.TYPE_CHANGE()){
 				entry.type = this.readByte();
 				switch(entry.type){
-					case ScorePacketEntry.TYPE_PLAYER:
-					case ScorePacketEntry.TYPE_ENTITY:
+					case ScorePacketEntry.TYPE_PLAYER():
+					case ScorePacketEntry.TYPE_ENTITY():
 						entry.entityUniqueId = this.getEntityUniqueId();
 						break;
-					case ScorePacketEntry.TYPE_FAKE_PLAYER:
+					case ScorePacketEntry.TYPE_FAKE_PLAYER():
 						entry.customName = this.readString();
 						break;
 					default:
@@ -55,14 +55,14 @@ class SetScorePacket extends DataPacket {
 			this.writeVarLong(entry.scoreboardId);
 			this.writeString(entry.objectiveName);
 			this.writeLInt(entry.score);
-			if(this.type === SetScorePacket.TYPE_CHANGE){
+			if(this.type === SetScorePacket.TYPE_CHANGE()){
 				this.writeByte(entry.type);
 				switch(entry.type){
-					case ScorePacketEntry.TYPE_PLAYER:
-					case ScorePacketEntry.TYPE_ENTITY:
+					case ScorePacketEntry.TYPE_PLAYER():
+					case ScorePacketEntry.TYPE_ENTITY():
 						this.writeEntityUniqueId(entry.entityUniqueId);
 						break;
-					case ScorePacketEntry.TYPE_FAKE_PLAYER:
+					case ScorePacketEntry.TYPE_FAKE_PLAYER():
 						this.writeString(entry.customName);
 						break;
 					default:
