@@ -1,6 +1,6 @@
-const Packet = raknet("protocolPacket");
-const EncapsulatedPacket = raknet("protocolEncapsulatedPacket");
-const BITFLAG = raknet("protocolBitFlags");
+const Packet = raknet("protocol/Packet");
+const EncapsulatedPacket = raknet("protocol/EncapsulatedPacket");
+const BITFLAG = raknet("protocol/BitFlags");
 
 class Datagram extends Packet {
     initVars(){
