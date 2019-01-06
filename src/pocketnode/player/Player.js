@@ -36,8 +36,6 @@ class Player extends CommandSender {
     initVars(){
         this._sessionAdapter = null;
 
-        this._protocol = -1;
-
         this.playedBefore = false;
         this.spawned = false;
         this.loggedIn = false;
@@ -91,7 +89,7 @@ class Player extends CommandSender {
     }
     
     static isValidUserName(name){
-        return name.toLowerCase() !== "rcon" && name.toLowerCase() !== "console" && name.length >= 1 && name.length <= 16 && /[^A-Za-z0-9_ ]/.test(name);
+        return name.toLowerCase() !== "rcon" && name.toLowerCase() !== "console" && name.length >= 1 && name.length <= 16 && /[^0-9a-bA-B\s]/gi.test(name);
     }
 
     isAuthenticated(){
@@ -125,13 +123,9 @@ class Player extends CommandSender {
     handleLogin(packet){
         CheckTypes([LoginPacket, packet]);
 
-        console.log(packet.clientData); // TODO: Figure out why this is an empty array
-
         if(this.loggedIn){
             return false;
         }
-
-        this._protocol = packet.protocol;
 
         if(packet.protocol !== MinecraftInfo.PROTOCOL){
             if(packet.protocol < MinecraftInfo.PROTOCOL){
@@ -158,21 +152,12 @@ class Player extends CommandSender {
 
         //todo: uuids
 
-        if(Player.isValidUserName(packet.username)){
+        if(!Player.isValidUserName(packet.username)){
             this.close("", "Invalid Username");
             return true;
         }
 
-        console.log(packet);
-
-        let skin = new Skin(
-            packet.clientData.SkinId,
-            Base64.decode(packet.clientData.SkinData ? packet.clientData.SkinData : ""),
-            Base64.decode(packet.clientData.CapeData ? packet.clientData.CapeData : ""),
-            (packet.clientData.SkinGeometryName ? packet.clientData.SkinGeometryName : ""),
-            Base64.decode(packet.clientData.SkinGeometry ? packet.clientData.SkinGeometry : "")
-        );
-
+        let skin = packet.skin;
         if(!skin.isValid()){
             this.close("", "Invalid Skin");
             return true;
@@ -347,7 +332,6 @@ class Player extends CommandSender {
     sendPlayStatus(status, immediate = false){
         let pk = new PlayStatusPacket();
         pk.status = status;
-        pk.protocol = this._protocol;
         if(immediate){
             this.directDataPacket(pk);
         }else{

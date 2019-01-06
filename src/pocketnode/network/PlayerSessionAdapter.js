@@ -196,6 +196,18 @@ class PlayerSessionAdapter {
         return false;
     }
 
+	handleServerToClientHandshake(packet){
+        return false;
+    }
+
+    handleClientToServerHandshake(packet){
+        return false;
+    }
+
+	handleNetworkStackLatency(packet){
+        return false;
+    }
+
     toString(){
         return this.player.getName() !== "" ? this.player.getName() : this.player.getAddress() + ":" + this.player.getPort();
     }

@@ -8,9 +8,10 @@ class SetScorePacket extends DataPacket {
 		return MinecraftInfo.SET_SCORE_PACKET;
 	}
 
+	static TYPE_CHANGE(){return 0;}
+	static TYPE_REMOVE(){return 1;}
+
 	initVars(){
-		this.TYPE_CHANGE = 0;
-		this.TYPE_REMOVE = 1;
 
 		this.type = 0;
 		this.entries = [];
@@ -29,7 +30,7 @@ class SetScorePacket extends DataPacket {
 			entry.scoreboardId = this.readVarLong();
 			entry.objectiveName = this.readString();
 			entry.score = this.readLInt();
-			if(this.type === this.TYPE_CHANGE){
+			if(this.type === SetScorePacket.TYPE_CHANGE){
 				entry.type = this.readByte();
 				switch(entry.type){
 					case ScorePacketEntry.TYPE_PLAYER:
@@ -54,7 +55,7 @@ class SetScorePacket extends DataPacket {
 			this.writeVarLong(entry.scoreboardId);
 			this.writeString(entry.objectiveName);
 			this.writeLInt(entry.score);
-			if(this.type === this.TYPE_CHANGE){
+			if(this.type === SetScorePacket.TYPE_CHANGE){
 				this.writeByte(entry.type);
 				switch(entry.type){
 					case ScorePacketEntry.TYPE_PLAYER:

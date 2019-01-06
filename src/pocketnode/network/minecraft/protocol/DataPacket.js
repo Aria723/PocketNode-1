@@ -1,3 +1,5 @@
+const assert = require("assert");
+
 const BinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 const Vector3 = pocketnode("math/Vector3");
 
@@ -42,16 +44,7 @@ class DataPacket extends BinaryStream {
 
     _decodeHeader(){
         let packetId = this.readUnsignedVarInt();
-        if(packetId === this.getId()){
-            this.extraByte1 = this.readByte();
-            this.extraByte2 = this.readByte();
-
-            if(this.extraByte1 !== 0 && this.extraByte2 !== 0){
-                throw new Error("Got unexpected non-zero split-screen bytes (byte1: "+this.extraBytes[0]+", byte2: "+this.extraBytes[1]);
-            }
-        }else{
-            throw new Error("Packet id received is different from DataPacket id! "+JSON.stringify({recieved: packetId, datapacket: this.getId()}));
-        }
+        assert(packetId === this.getId());
     }
 
     _decodePayload(){}
@@ -65,9 +58,6 @@ class DataPacket extends BinaryStream {
 
     _encodeHeader(){
         this.writeUnsignedVarInt(this.getId());
-
-        this.writeByte(this.extraByte1)
-            .writeByte(this.extraByte2);
     }
 
     _encodePayload(){}

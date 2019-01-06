@@ -1,10 +1,10 @@
 class ScorePacketEntry {
 
-	initVars(){
-		this.TYPE_PLAYER = 1;
-		this.TYPE_ENTITY = 2;
-		this.TYPE_FAKE_PLAYER = 3;
+	static TYPE_PLAYER(){return 1;}
+	static TYPE_ENTITY(){return 2;}
+	static TYPE_FAKE_PLAYER(){return 3;}
 
+	initVars(){
 		this.scoreboardId = 0;
 		this.objectiveName = "";
 		this.score = 0;

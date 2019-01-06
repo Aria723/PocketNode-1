@@ -3,7 +3,7 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class VersionCommand extends Command {
 	constructor(){
-		super("version", "Stops the server.", "pocketnode.command.version", ["ver"]);
+		super("version", "Check the server's current PocketNode version.", "pocketnode.command.version", ["ver"]);
 	}
 
 	execute(sender, args){

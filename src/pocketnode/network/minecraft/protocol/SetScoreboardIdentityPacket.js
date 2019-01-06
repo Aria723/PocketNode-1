@@ -4,15 +4,14 @@ const ScoreboardEntry = pocketnode("network/minecraft/protocol/types/ScoreboardI
 
 class SetScoreboardIdentityPacket extends DataPacket {
 
-
-
 	static getId(){
 		return MinecraftInfo.SET_SCOREBOARD_IDENTITY_PACKET;
 	}
 
+	static TYPE_REGISTER_IDENTITY(){return 0;}
+	static TYPE_CLEAR_IDENTITY(){return 1;}
+
 	initVars(){
-		this.TYPE_REGISTER_IDENTITY = 0;
-		this.TYPE_CLEAR_IDENTITY = 1;
 
 		this.type = 0;
 		this.entries = [];
@@ -29,7 +28,7 @@ class SetScoreboardIdentityPacket extends DataPacket {
 		for(let i = 0; i < count; i++){
 			let entry = new ScoreboardEntry();
 			entry.scoreboardId = this.readVarLong();
-			if(this.type === this.TYPE_REGISTER_IDENTITY){
+			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY){
 				entry.entityUniqueId = this.getEntityUniqueId();
 			}
 			this.entries.push(entry);
@@ -42,7 +41,7 @@ class SetScoreboardIdentityPacket extends DataPacket {
 		for(let i = 0; i < this.entries.length; i++){
 			let entry = this.entries[i];
 			this.writeVarLong(entry.scoreboardId);
-			if(this.type === this.TYPE_REGISTER_IDENTITY){
+			if(this.type === SetScoreboardIdentityPacket.TYPE_REGISTER_IDENTITY){
 				this.writeEntityUniqueId(entry.entityUniqueId);
 			}
 		}

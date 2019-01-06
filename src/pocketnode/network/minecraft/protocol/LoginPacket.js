@@ -4,6 +4,9 @@ const MinecraftInfo = pocketnode("network/minecraft/Info");
 const BinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 const Utils = pocketnode("utils/Utils");
 
+const Skin = pocketnode("entity/Skin");
+
+const Base64 = pocketnode("utils/Base64");
 const Isset = pocketnode("utils/methods/Isset");
 
 class LoginPacket extends DataPacket {
@@ -20,10 +23,13 @@ class LoginPacket extends DataPacket {
         this.identityPublicKey = "";
         this.serverAddress = "";
         this.locale = "";
+        this.skin = null;
 
         this.chainData = [];
         this.clientDataJwt = "";
         this.clientData = [];
+
+        this.stream = null;
     }
 
     constructor(){
@@ -42,16 +48,9 @@ class LoginPacket extends DataPacket {
     _decodePayload(){
         this.protocol = this.readInt();
 
-        /*if(this.protocol !== MinecraftInfo.PROTOCOL){
-            if(this.protocol > 0xffff){
-                this.offset -= 6;
-                this.protocol = this.readInt();
-            }
-            return;
-        }*/
-
         let stream = new BinaryStream(this.read(this.readUnsignedVarInt()));
         //let stream = new BinaryStream(this.readString());
+	    this.stream = stream;
         this.chainData = JSON.parse(stream.read(stream.readLInt()).toString());
 
         this.chainData.chain.forEach(chain => {
@@ -80,6 +79,14 @@ class LoginPacket extends DataPacket {
         this.serverAddress = Isset(this.clientData.ServerAddress) ? this.clientData.ServerAddress : null;
 
         this.locale = this.clientData.languageCode;
+
+        this.skin = new Skin(
+	        this.clientData.SkinId,
+	        Base64.decode(this.clientData.SkinData ? this.clientData.SkinData : ""),
+	        Base64.decode(this.clientData.CapeData ? this.clientData.CapeData : ""),
+	        (this.clientData.SkinGeometryName ? this.clientData.SkinGeometryName : ""),
+	        Base64.decode(this.clientData.SkinGeometry ? this.clientData.SkinGeometry : "")
+        );
     }
 
     handle(session){

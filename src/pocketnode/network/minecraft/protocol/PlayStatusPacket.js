@@ -16,8 +16,6 @@ class PlayStatusPacket extends DataPacket {
 
     initVars(){
         this.status = -1;
-        this.protocol = -1;
-
     }
 
     constructor(){
@@ -31,14 +29,6 @@ class PlayStatusPacket extends DataPacket {
 
     _decodePayload(){
         this.status = this.readInt();
-    }
-
-    _encodeHeader(){
-        if(this.protocol < 130){
-            this.writeByte(this.getId());
-        }else{
-            super._encodeHeader();
-        }
     }
 
     _encodePayload(){

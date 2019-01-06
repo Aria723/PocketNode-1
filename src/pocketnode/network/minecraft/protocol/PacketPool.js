@@ -1,5 +1,7 @@
 const LoginPacket = pocketnode("network/minecraft/protocol/LoginPacket");
 const PlayStatusPacket = pocketnode("network/minecraft/protocol/PlayStatusPacket");
+const ServerToClientHandshakePacket = pocketnode("network/minecraft/protocol/ServerToClientHandshakePacket");
+const ClientToServerHandshakePacket = pocketnode("network/minecraft/protocol/ClientToServerHandshakePacket");
 const DisconnectPacket = pocketnode("network/minecraft/protocol/DisconnectPacket");
 const ResourcePacksInfoPacket = pocketnode("network/minecraft/protocol/ResourcePacksInfoPacket");
 const ResourcePackClientResponsePacket = pocketnode("network/minecraft/protocol/ResourcePackClientResponsePacket");
@@ -11,6 +13,7 @@ const SetScoreboardIdentityPacket = pocketnode("network/minecraft/protocol/SetSc
 const SetScorePacket = pocketnode("network/minecraft/protocol/SetScorePacket");
 const SpawnParticleEffectPacket = pocketnode("network/minecraft/protocol/SpawnParticleEffectPacket");
 const UpdateSoftEnumPacket = pocketnode("network/minecraft/protocol/UpdateSoftEnumPacket");
+const NetworkStackLatencyPacket = pocketnode("network/minecraft/protocol/NetworkStackLatencyPacket");
 
 class PacketPool {
     constructor(){
@@ -33,8 +36,8 @@ class PacketPool {
     registerPackets(){
         this.registerPacket(LoginPacket);
         this.registerPacket(PlayStatusPacket);
-        //serverclienthandshake
-        //viseversa
+        this.registerPacket(ServerToClientHandshakePacket);
+        this.registerPacket(ClientToServerHandshakePacket);
         this.registerPacket(DisconnectPacket);
         this.registerPacket(ResourcePacksInfoPacket);
         this.registerPacket(ResourcePackClientResponsePacket);
@@ -46,6 +49,7 @@ class PacketPool {
         this.registerPacket(SetScorePacket);
         this.registerPacket(SpawnParticleEffectPacket);
         this.registerPacket(UpdateSoftEnumPacket);
+        this.registerPacket(NetworkStackLatencyPacket);
     }
 }
 
