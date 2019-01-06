@@ -32,16 +32,15 @@ Please do not create issues for missing/un-implemented gameplay features - they 
 2. ...
 
 ### OS and versions
-<!--- use the 'version' command in PocketMine-MP
+<!--- use the 'version' command in PocketNode
 
-NOTE: LATEST is not a valid version. PocketMine-MP version should include Jenkins build number and/or git commit hash.
+NOTE: LATEST is not a valid version. PocketNode version should include Jenkins build number and/or git commit hash.
 
-NO support whatsoever will be provided for third-party modified variants of PocketMine-MP. Issues relating to third-party modifications will be closed as spam.
+NO support whatsoever will be provided for third-party modified variants of PocketNode. Issues relating to third-party modifications will be closed as spam.
 
-Note that 32-bit platforms are no longer supported by PocketMine-MP and issues concerning 32-bit platforms will be closed.
 -->
 * PocketNode: <!-- LATEST IS NOT A VALID VERSION -->
-* NodeJS:
+* Node:
 * Server OS:
 * Game version: PE/Win10 (delete as appropriate)
 
