@@ -67,6 +67,10 @@ class SimpleFileSystem {
 			return d + p;
 		});
 	}
+
+    static readDir(d){
+        return fs.readdirSync(d);
+    }
 }
 
 module.exports = SimpleFileSystem;
