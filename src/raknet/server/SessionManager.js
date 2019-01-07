@@ -1,6 +1,6 @@
 const Session = raknet("server/Session");
 
-const BinaryStream = require("pocketnode-binarystream");
+const BinaryStream = binarystream("BinaryStream");
 
 const OfflineMessage = raknet("protocol/OfflineMessage");
 const OfflineMessageHandler = raknet("server/OfflineMessageHandler");

@@ -1,6 +1,6 @@
 const Packet = raknet("protocol/Packet");
 
-const BinaryStream = require("pocketnode-binarystream");
+const BinaryStream = binarystream("BinaryStream");
 
 class AcknowledgementPacket extends Packet {
 	constructor(stream){

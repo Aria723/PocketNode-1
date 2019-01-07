@@ -1,7 +1,7 @@
 const Packet = raknet("protocol/Packet");
 
 const RakNet = raknet("RakNet");
-const BinaryStream = require("pocketnode-binarystream");
+const BinaryStream = binarystream("BinaryStream");
 
 const Datagram = raknet("protocol/Datagram");
 const EncapsulatedPacket = raknet("protocol/EncapsulatedPacket");
