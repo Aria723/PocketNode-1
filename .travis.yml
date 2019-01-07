@@ -5,7 +5,3 @@ node_js:
 
 script:
   node start --travis-build
-
-notifications:
-  email: false
-  webhooks: https://edroid.tk/projects/pocketnode/travis-ci.php
