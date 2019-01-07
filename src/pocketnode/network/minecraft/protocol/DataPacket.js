@@ -8,8 +8,8 @@ class DataPacket extends BinaryStream {
 		super();
 
 		this.isEncoded = false;
-		this.extraByte1 = 0;
-		this.extraByte2 = 0;
+		this.senderSubId = 0;
+		this.recipientSubId = 0;
 	}
 
 	static getId(){
