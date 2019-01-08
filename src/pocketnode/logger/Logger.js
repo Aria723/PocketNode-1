@@ -1,5 +1,6 @@
 const TimeStamp = require("time-stamp");
 
+const SFS = pocketnode("utils/SimpleFileSystem");
 const TextFormat = pocketnode("utils/TextFormat");
 const TerminalTextFormat = pocketnode("utils/TerminalTextFormat");
 

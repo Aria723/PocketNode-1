@@ -56,9 +56,9 @@ class ResourcePackClientResponsePacket extends DataPacket {
 	_encodePayload(){
 		this.writeByte(this.status);
 		this.writeLShort(this.packIds.length);
-		this.packIds.forEach(id => {
-			this.writeString(id);
-		});
+		for(let i = 0; i < this.packIds.length; ++i){
+			this.writeString(this.packIds[i]);
+		}
 	}
 
 	handle(session){

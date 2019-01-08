@@ -1,6 +1,8 @@
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
+const NetworkBinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 const PermissionLevel = pocketnode("permission/PermissionLevel");
+const SFS = pocketnode("utils/SimpleFileSystem");
 
 class StartGamePacket extends DataPacket {
 	constructor(){
@@ -13,6 +15,7 @@ class StartGamePacket extends DataPacket {
 	}
 
 	initVars(){
+		this.runtimeIdTable = null;
 
 		this.entityUniqueId = 0;
 		this.entityRuntimeId = 0;
@@ -32,7 +35,7 @@ class StartGamePacket extends DataPacket {
 		this.spawnY = 0;
 		this.spawnZ = 0;
 		this.hasAchievementsDisabled = true;
-		this.time = -1;
+		this.time = 0;
 		this.eduMode = false;
 		this.hasEduFeaturesEnabled = false;
 
@@ -183,6 +186,20 @@ class StartGamePacket extends DataPacket {
 		this.writeLLong(this.currentTick);
 
 		this.writeVarInt(this.enchantmentSeed);
+
+		if(this.runtimeIdTable === null){
+			let stream = new NetworkBinaryStream();
+			let data = pocketnode("resources/runtimeid_table.json");
+			stream.writeUnsignedVarInt(data.length);
+			for(let i = 0; i < data.length; ++i){
+				let v = data[i];
+				stream.writeString(v.name);
+				stream.writeLShort(v.data);
+			}
+			console.log(1);
+			this.runtimeIdTable = stream.getBuffer();
+		}
+		this.append(this.runtimeIdTable);
 
 		this.writeString(this.multiplayerCorrelationId);
 	}

@@ -625,7 +625,7 @@ class BinaryStream {
 	 */
 	writeString(v){
 		this.append(Buffer.from(v, "utf8"));
-		return this;
+
 	}
 
 	flip(){
