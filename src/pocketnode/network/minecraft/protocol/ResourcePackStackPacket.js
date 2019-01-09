@@ -42,18 +42,20 @@ class ResourcePackStackPacket extends DataPacket {
 	_encodePayload(){
 		this.writeBool(this.mustAccept);
 		this.writeUnsignedVarInt(this.behaviorPackStack.length);
-		this.behaviorPackStack.forEach(entry => {
-			this.writeString(entry.getPackId())
-				.writeString(entry.getPackVersion())
-				.writeString("");
-		});
+		for(let i = 0; i < this.behaviorPackStack.length; ++i){
+			let entry = this.behaviorPackStack[i];
+			this.writeString(entry.getPackId());
+			this.writeString(entry.getPackVersion());
+			this.writeString("");
+		}
 
 		this.writeUnsignedVarInt(this.resourcePackStack.length);
-		this.resourcePackStack.forEach(entry => {
-			this.writeString(entry.getPackId())
-				.writeString(entry.getPackVersion())
-				.writeString("");
-		});
+		for(let i = 0; i < this.resourcePackStack.length; ++i){
+			let entry = this.resourcePackStack[i];
+			this.writeString(entry.getPackId());
+			this.writeString(entry.getPackVersion());
+			this.writeString("");
+		}
 
 		this.writeBool(this.isExperimental);
 	}

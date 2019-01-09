@@ -50,10 +50,11 @@ class TextPacket extends DataPacket {
 	initVars(){
 		this.type = -1;
 		this.needsTranslation = false;
-		this.source = "";
+		this.sourceName = "";
 		this.message = "";
 		this.parameters = [];
 		this.xuid = "";
+		this.platformChatId = "";
 	}
 
 	_decodePayload(){
@@ -63,7 +64,7 @@ class TextPacket extends DataPacket {
 			case TextPacket.TYPE_CHAT:
 			case TextPacket.TYPE_WHISPER:
 			case TextPacket.TYPE_ANNOUNCEMENT:
-				this.source = this.readString();
+				this.sourceName = this.readString();
 			case TextPacket.TYPE_RAW:
 			case TextPacket.TYPE_TIP:
 			case TextPacket.TYPE_SYSTEM:
@@ -82,6 +83,7 @@ class TextPacket extends DataPacket {
 		}
 
 		this.xuid = this.readString();
+		this.platformChatId = this.readString();
 	}
 
 	_encodePayload(){
@@ -92,7 +94,7 @@ class TextPacket extends DataPacket {
 			case TextPacket.TYPE_WHISPER:
 			/** @noinspection */
 			case TextPacket.TYPE_ANNOUNCEMENT:
-				this.writeString(this.source);
+				this.writeString(this.sourceName);
 			case TextPacket.TYPE_RAW:
 			case TextPacket.TYPE_TIP:
 			case TextPacket.TYPE_SYSTEM:
@@ -104,11 +106,14 @@ class TextPacket extends DataPacket {
 			case TextPacket.TYPE_JUKEBOX_POPUP:
 				this.writeString(this.message);
 				this.writeUnsignedVarInt(this.parameters.length);
-				this.parameters.forEach(p => this.writeString(p));
+				for(let i = 0; i < this.parameters.length; ++i){
+					this.writeString(this.parameters[i]);
+				}
 				break;
 		}
 
 		this.writeString(this.xuid);
+		this.writeString(this.platformChatId);
 	}
 
 	handle(session){

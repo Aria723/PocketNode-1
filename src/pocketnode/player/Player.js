@@ -492,7 +492,7 @@ class Player extends CommandSender {
 		this.server.addOnlinePlayer(this);
 		this.server.onPlayerCompleteLoginSequence(this);
 
-		//this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
+		this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
 	}
 
 	chat(message){

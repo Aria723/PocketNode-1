@@ -66,7 +66,7 @@ class PlayerSessionAdapter {
 				packet.packIds.shift();//todo figure out why the first id is 00000000-0000-0000-0000-000000000000
 				for(let i in packet.packIds){
 					let uuid = packet.packIds[i];
-					let pack = manager.getPackById(uuid);
+					let pack = manager.getPackById(uuid.substr(0), (uuid + "").indexOf("_"));
 					if(!(pack instanceof ResourcePack)){
 						this.player.close("", "Resource Pack is not on this server", true);
 						this.server.getLogger().debug("Got a resource pack request for unknown pack with UUID " + uuid + ", available packs: " + manager.getPackIdList().join(", "));
