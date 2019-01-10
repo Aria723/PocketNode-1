@@ -7,7 +7,11 @@ const Server = pocketnode("Server");
 
 function PocketNode(paths){
 	this.START_TIME = Date.now();
-	this.NAME = "PocketNode";
+	this.NAME = "  ____   ___   ____ _  _______ _____ _   _  ___  ____  ____ 
+	|  _ \ / _ \ / ___| |/ / ____|_   _| \ | |/ _ \|  _ \| ____|
+	| |_) | | | | |   | ' /|  _|   | | |  \| | | | | | | |  _|  
+	|  __/| |_| | |___| . \| |___  | | | |\  | |_| | |_| | |___ 
+	|_|    \___/ \____|_|\_\_____| |_| |_| \_|\___/|____/|_____|";
 	this.CODENAME = "[BEGINNINGS]";
 	this.VERSION = "0.0.5";
 	this.API_VERSION = "1.0.0";
