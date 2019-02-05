@@ -2,67 +2,39 @@ const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ResourcePackStackPacket extends DataPacket {
-	constructor(){
-		super();
-		this.initVars();
-	}
+    static getId(){
+        return MinecraftInfo.RESOURCE_PACK_STACK_PACKET;
+    }
 
-	static getId(){
-		return MinecraftInfo.RESOURCE_PACK_STACK_PACKET;
-	}
+    initVars(){
+        this.mustAccept = false;
 
-	initVars(){
-		this.mustAccept = false;
+        this.behaviorPackStack = [];
+        this.resourcePackStack = [];
+    }
 
-		this.behaviorPackStack = [];
-		this.resourcePackStack = [];
+    constructor(){
+        super();
+        this.initVars();
+    }
 
-		this.isExperimental = false;
-	}
+    _encodePayload(){
+        this.writeBool(this.mustAccept);
 
-	_decodePayload(){
-		this.mustAccept = this.readBool();
-		let behaviorPackCount = this.readUnsignedVarInt();
-		while(behaviorPackCount-- > 0){
-			this.readString();
-			this.readString();
-			this.readString();
-		}
+        this.writeUnsignedVarInt(this.behaviorPackStack.length);
+        this.behaviorPackStack.forEach(entry => {
+            this.writeString(entry.getPackId())
+                .writeString(entry.getPackVersion())
+                .writeString("");
+        });
 
-		let resourcePackCount = this.readUnsignedVarInt();
-		while(resourcePackCount-- > 0){
-			this.readString();
-			this.readString();
-			this.readString();
-		}
-
-		this.isExperimental = this.readBool();
-	}
-
-	_encodePayload(){
-		this.writeBool(this.mustAccept);
-		this.writeUnsignedVarInt(this.behaviorPackStack.length);
-		for(let i = 0; i < this.behaviorPackStack.length; ++i){
-			let entry = this.behaviorPackStack[i];
-			this.writeString(entry.getPackId());
-			this.writeString(entry.getPackVersion());
-			this.writeString("");
-		}
-
-		this.writeUnsignedVarInt(this.resourcePackStack.length);
-		for(let i = 0; i < this.resourcePackStack.length; ++i){
-			let entry = this.resourcePackStack[i];
-			this.writeString(entry.getPackId());
-			this.writeString(entry.getPackVersion());
-			this.writeString("");
-		}
-
-		this.writeBool(this.isExperimental);
-	}
-
-	handle(session){
-		session.handleResourcePackStack(this);
-	}
+        this.writeUnsignedVarInt(this.resourcePackStack.length);
+        this.resourcePackStack.forEach(entry => {
+            this.writeString(entry.getPackId())
+                .writeString(entry.getPackVersion())
+                .writeString("");
+        });
+    }
 }
 
 module.exports = ResourcePackStackPacket;

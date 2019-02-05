@@ -1,2 +1,1 @@
-module.exports = class PluginException extends Error {
-};
+module.exports = class PluginException extends Error {};

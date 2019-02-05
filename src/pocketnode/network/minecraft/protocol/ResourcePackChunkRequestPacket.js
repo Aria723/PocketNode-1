@@ -2,33 +2,33 @@ const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
 class ResourcePackChunkRequestPacket extends DataPacket {
-	constructor(){
-		super();
-		this.initVars();
-	}
+    static getId(){
+        return MinecraftInfo.RESOURCE_PACK_CHUNK_REQUEST_PACKET;
+    }
 
-	static getId(){
-		return MinecraftInfo.RESOURCE_PACK_CHUNK_REQUEST_PACKET;
-	}
+    initVars(){
+        this.packId = "";
+        this.chunkIndex = 0;
+    }
 
-	initVars(){
-		this.packId = "";
-		this.chunkIndex = 0;
-	}
+    constructor(){
+        super();
+        this.initVars();
+    }
 
-	_decodePayload(){
-		this.packId = this.readString();
-		this.chunkIndex = this.readLInt();
-	}
+    _decodePayload(){
+        this.packId = this.readString();
+        this.chunkIndex = this.readLInt();
+    }
 
-	_encodePayload(){
-		this.writeString(this.packId);
-		this.writeLInt(this.chunkIndex);
-	}
+    _encodePayload(){
+        this.writeString(this.packId)
+            .writeLInt(this.chunkIndex);
+    }
 
-	handle(session){
-		return session.handleResourcePackChunkRequest(this);
-	}
+    handle(session){
+        return session.handleResourcePackChunkRequest(this);
+    }
 }
 
 module.exports = ResourcePackChunkRequestPacket;

@@ -1,18 +1,15 @@
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 const MinecraftInfo = pocketnode("network/minecraft/Info");
 
-class SetScorePacket extends DataPacket {
+class UpdateBlockSyncedPacket extends DataPacket {
 
     static getId(){
-        return MinecraftInfo.SET_SCORE_PACKET;
+        return MinecraftInfo.UPDATE_BLOCK_SYNCED_PACKET;
     }
 
-    static get TYPE_MODIFY_SCORE() {return 0};
-	static get TYPE_RESET_SCORE() {return 1};
-
     initVars(){
-        this.type = -1;
-        this.entries = []; //ScorePacketEntry[]
+        this.uvarint64_1 = 0;
+        this.uvarint64_2 = 0;
     }
 
     constructor(){
@@ -29,4 +26,4 @@ class SetScorePacket extends DataPacket {
     }
 }
 
-module.exports = SetScorePacket;
+module.exports = UpdateBlockSyncedPacket;

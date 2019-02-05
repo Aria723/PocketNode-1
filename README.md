@@ -15,14 +15,10 @@ Afterwards:
 $ node start
 ```
 
-## Things To Do
- - Fix Chunks Crashing Client
- - Functional Event System
- - Functional Permission System
- - Add Vanilla Commands
- - Add World Generation
- - Add Entities
- - Functional Plugin System
+## License Info:
+This project is a modified version of PocketNode by eDroid (under the org name of Pocketnode) found at (https://github.com/PocketNode/PocketNode)
+This project is licensed under the GNU public V3 (Same as original) and cannot be changed.
+For reference of changes made since original please use the commits tab at https://github.com/TwistedAslyumMC/PocketNode
 
 ## Warning
 **This is a freelance project, please dont expect constant development on it. If you'd like to make any contributions please feel free to create a Pull Request. Thanks.**

@@ -1,165 +1,175 @@
-const assert = require("assert");
-
 const BinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 const Vector3 = pocketnode("math/Vector3");
 
 class DataPacket extends BinaryStream {
-	constructor(){
-		super();
+    static getId(){
+        return 0;
+    }
 
-		this.isEncoded = false;
-	}
+    getId(){
+        return this.constructor.getId();
+    }
 
-	static getId(){
-		return 0;
-	}
+    constructor(){
+        super();
 
-	getId(){
-		return this.constructor.getId();
-	}
+        this.isEncoded = false;
+        this.extraByte1 = 0;
+        this.extraByte2 = 0;
+    }
 
-	getName(){
-		return this.constructor.name;
-	}
+    getName(){
+        return this.constructor.name;
+    }
 
-	canBeBatched(){
-		return true;
-	}
+    canBeBatched(){
+        return true;
+    }
 
-	canBeSentBeforeLogin(){
-		return false;
-	}
+    canBeSentBeforeLogin(){
+        return false;
+    }
 
-	mayHaveUnreadBytes(){
-		return false;
-	}
+    mayHaveUnreadBytes(){
+        return false;
+    }
 
-	decode(){
-		this.offset = 0;
-		this._decodeHeader();
-		this._decodePayload();
-	}
+    decode(){
+        this.offset = 0;
+        this._decodeHeader();
+        this._decodePayload();
+    }
 
-	_decodeHeader(){
-		let packetId = this.readUnsignedVarInt();
-		assert(packetId === this.getId());
-	}
+    _decodeHeader(){
+        let packetId = this.readUnsignedVarInt();
+        if(packetId === this.getId()){
+            this.extraByte1 = this.readByte();
+            this.extraByte2 = this.readByte();
 
-	_decodePayload(){
-	}
+            if(this.extraByte1 !== 0 && this.extraByte2 !== 0){
+                throw new Error("Got unexpected non-zero split-screen bytes (byte1: "+this.extraBytes[0]+", byte2: "+this.extraBytes[1]);
+            }
+        }else{
+            throw new Error("Packet id received is different from DataPacket id! "+JSON.stringify({recieved: packetId, datapacket: this.getId()}));
+        }
+    }
 
-	encode(){
-		this.reset();
-		this._encodeHeader();
-		this._encodePayload();
-		this.isEncoded = true;
-	}
+    _decodePayload(){}
 
-	_encodeHeader(){
-		this.writeUnsignedVarInt(this.getId());
-	}
+    encode(){
+        this.reset();
+        this._encodeHeader();
+        this._encodePayload();
+        this.isEncoded = true;
+    }
 
-	_encodePayload(){
-	}
+    _encodeHeader(){
+        this.writeUnsignedVarInt(this.getId());
 
-	getBuffer(){
-		return this.buffer;
-	}
+        this.writeByte(this.extraByte1)
+            .writeByte(this.extraByte2);
+    }
 
-	readEntityUniqueId(){
-		return this.readVarLong();
-	}
+    _encodePayload(){}
 
-	writeEntityUniqueId(eid){
-		this.writeVarLong(eid);
-		return this;
-	}
+    getBuffer(){
+        return this.buffer;
+    }
 
-	readEntityRuntimeId(){
-		return this.readUnsignedVarLong();
-	}
+    getEntityUniqueId(){
+        return this.readVarLong();
+    }
 
-	writeEntityRuntimeId(eid){
-		this.writeUnsignedVarLong(eid);
-		return this;
-	}
+    writeEntityUniqueId(eid){
+        this.writeVarLong(eid);
+        return this;
+    }
 
-	readVector3Obj(){
-		return new Vector3(
-			this.readRoundedLFloat(4),
-			this.readRoundedLFloat(4),
-			this.readRoundedLFloat(4)
-		);
-	}
+    getEntityRuntimeId(){
+        return this.readUnsignedVarLong();
+    }
 
-	writeVector3Obj(vector){
-		this.writeLFloat(vector.x);
-		this.writeLFloat(vector.y);
-		this.writeLFloat(vector.z);
-	}
+    writeEntityRuntimeId(eid){
+        this.writeUnsignedVarLong(eid);
+        return this;
+    }
 
-	readBlockPosition(){
-		return [
-			this.readVarInt(),
-			this.readUnsignedVarInt(),
-			this.readVarInt()
-		];
-	}
+    getVector3Obj(){
+        return new Vector3(
+            this.readRoundedLFloat(4),
+            this.readRoundedLFloat(4),
+            this.readRoundedLFloat(4)
+        );
+    }
 
-	writeBlockPosition(x, y, z){
-		this.writeVarInt(x)
-			.writeUnsignedVarInt(y)
-			.writeVarInt(z);
-		return this;
-	}
+    writeVector3Obj(vector){
+        this.writeLFloat(vector.x);
+        this.writeLFloat(vector.y);
+        this.writeLFloat(vector.z);
+    }
 
-	readGameRules(){
-		let count = this.readUnsignedVarInt();
-		let rules = [];
-		for(let i = 0; i < count; ++i){
-			let name = this.readString();
-			let type = this.readUnsignedVarInt();
-			let value = null;
-			switch(type){
-				case 1:
-					value = this.readBool();
-					break;
-				case 2:
-					value = this.readUnsignedVarInt();
-					break;
-				case 3:
-					value = this.readLFloat();
-					break;
-			}
+    getBlockPosition(){
+        return [
+            this.readVarInt(),
+            this.readUnsignedVarInt(),
+            this.readVarInt()
+        ];
+    }
 
-			rules[name] = [type, value];
-		}
+    writeBlockPosition(x, y, z){
+        this.writeVarInt(x)
+            .writeUnsignedVarInt(y)
+            .writeVarInt(z);
+        return this;
+    }
 
-		return rules;
-	}
+    getGameRules(){
+        let count = this.readUnsignedVarInt();
+        let rules = [];
+        for(let i = 0; i < count; ++i){
+            let name = this.readString();
+            let type = this.readUnsignedVarInt();
+            let value = null;
+            switch(type){
+                case 1:
+                    value = this.readBool();
+                    break;
+                case 2:
+                    value = this.readUnsignedVarInt();
+                    break;
+                case 3:
+                    value = this.readLFloat();
+                    break;
+            }
 
-	writeGameRules(rules){
-		this.writeUnsignedVarInt(rules.length);
-		rules.forEach(rule => {
-			this.writeString(rule.getName());
-			if(typeof rule.getValue() === "boolean"){
-				this.writeByte(1);
-				this.writeBool(rule.getValue());
-			}else if(Number.isInteger(rule.getValue())){
-				this.writeByte(2);
-				this.writeUnsignedVarInt(rule.getValue());
-			}else if(typeof rule.getValue() === "number" && !Number.isInteger(rule.getValue())){
-				this.writeByte(3);
-				this.writeLFloat(rule.getValue());
-			}
-		});
+            rules[name] = [type, value];
+        }
 
-		return this;
-	}
+        return rules;
+    }
 
-	handle(session){
-		return false;
-	}
+    writeGameRules(rules){
+        this.writeUnsignedVarInt(rules.length);
+        rules.forEach(rule => {
+            this.writeString(rule.getName());
+            if(typeof rule.getValue() === "boolean") {
+                this.writeByte(1);
+                this.writeBool(rule.getValue());
+            }else if(Number.isInteger(rule.getValue())){
+                this.writeByte(2);
+                this.writeUnsignedVarInt(rule.getValue());
+            }else if(typeof rule.getValue() === "number" && !Number.isInteger(rule.getValue())){
+                this.writeByte(3);
+                this.writeLFloat(rule.getValue());
+            }
+        });
+
+        return this;
+    }
+
+    handle(session){
+        return false;
+    }
 }
 
 module.exports = DataPacket;
