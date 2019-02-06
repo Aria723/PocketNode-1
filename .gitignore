@@ -70,3 +70,4 @@ banned-*.json
 ops.json
 whitelist.json
 docs/
+package-lock.json
