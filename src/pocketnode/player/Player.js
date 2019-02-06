@@ -296,7 +296,7 @@ class Player extends CommandSender {
 
         this._authenticated = isAuthenticated;
 
-        if(!isAuthenticated){
+        /*if(!isAuthenticated){
             if(this.server.requiresAuthentication() && this.kick("This server requires authentication.", false)){
                 return;
             }
@@ -307,6 +307,8 @@ class Player extends CommandSender {
             }
             this._xuid = packet.xuid;
         }
+        disabled as i cannot login as im using a sideloaded version of mcpe to test
+        */
 
         this._processLogin();
     }

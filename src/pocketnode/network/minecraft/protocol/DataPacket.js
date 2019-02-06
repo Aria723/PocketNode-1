@@ -94,7 +94,7 @@ class DataPacket extends BinaryStream {
         return this;
     }
 
-    getVector3Obj(){
+    getVector3(){
         return new Vector3(
             this.readRoundedLFloat(4),
             this.readRoundedLFloat(4),
@@ -102,7 +102,7 @@ class DataPacket extends BinaryStream {
         );
     }
 
-    writeVector3Obj(vector){
+    writeVector3(vector){
         this.writeLFloat(vector.x);
         this.writeLFloat(vector.y);
         this.writeLFloat(vector.z);

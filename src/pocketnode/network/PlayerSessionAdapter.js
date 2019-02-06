@@ -1,20 +1,9 @@
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
-const LoginPacket = pocketnode("network/minecraft/protocol/LoginPacket");
-const BatchPacket = pocketnode("network/minecraft/protocol/BatchPacket");
 const ResourcePackClientResponsePacket = pocketnode("network/minecraft/protocol/ResourcePackClientResponsePacket");
 const ResourcePackDataInfoPacket = pocketnode("network/minecraft/protocol/ResourcePackDataInfoPacket");
 const ResourcePackStackPacket = pocketnode("network/minecraft/protocol/ResourcePackStackPacket");
-const ResourcePackChunkRequestPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkRequestPacket");
 const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkDataPacket");
-const RequestChunkRadiusPacket = pocketnode("network/minecraft/protocol/RequestChunkRadiusPacket");
 const PlayStatusPacket = pocketnode("network/minecraft/protocol/PlayStatusPacket");
-const RemoveObjectivePacket = pocketnode("network/minecraft/protocol/RemoveObjectivePacket");
-const SetLocalPlayerAsInitializedPacket = pocketnode("network/minecraft/protocol/SetLocalPlayerAsInitializedPacket");
-const SetDisplayObjectivePacket = pocketnode("network/minecraft/protocol/SetDisplayObjectivePacket");
-const SetScorePacket = pocketnode("network/minecraft/protocol/SetScorePacket");
-const UpdateBlockSyncedPacket = pocketnode("network/minecraft/protocol/UpdateBlockSyncedPacket");
-const MoveEntityAbsolutePacket = pocketnode("network/minecraft/protocol/MoveEntityAbsolutePacket");
-const MoveEntityDeltaPacket = pocketnode("network/minecraft/protocol/MoveEntityDeltaPacket");
 
 const DataPacketReceiveEvent = pocketnode("event/server/DataPacketReceiveEvent");
 
@@ -205,7 +194,11 @@ class PlayerSessionAdapter {
     
  	handleUpdateBlockSynced(packet){
 		return false;
-	}
+    }
+    
+    handleMovePlayer(packet){
+        return false; //big todo
+    }
 
     toString(){
         return this.player.getName() !== "" ? this.player.getName() : this.player.getAddress() + ":" + this.player.getPort();

@@ -19,10 +19,13 @@ class TextPacket extends DataPacket {
     initVars(){
         this.type = -1;
         this.needsTranslation = false;
-        this.source = "";
-        this.message = "";
+        this.sourceName = "";
+        this.sourceThirdPartyName = "";
+	    this.sourcePlatform = 0;
+	    this.message = "";
         this.parameters = [];
         this.xuid = "";
+        this.platformChatId = "";
     }
 
     constructor(){
@@ -36,8 +39,11 @@ class TextPacket extends DataPacket {
         switch(this.type){
             case TextPacket.TYPE_CHAT:
             case TextPacket.TYPE_WHISPER:
+            /** @noinspection */
             case TextPacket.TYPE_ANNOUNCEMENT:
-                this.source = this.readString();
+                this.sourceName = this.readString();
+                this.sourceThirdPartyName = this.readString();
+                this.sourcePlatform = this.readVarInt();
             case TextPacket.TYPE_RAW:
             case TextPacket.TYPE_TIP:
             case TextPacket.TYPE_SYSTEM:
@@ -54,8 +60,8 @@ class TextPacket extends DataPacket {
                 }
                 break;
         }
-
         this.xuid = this.readString();
+		this.platformChatId = this.readString();
     }
 
     _encodePayload(){
@@ -66,7 +72,9 @@ class TextPacket extends DataPacket {
             case TextPacket.TYPE_WHISPER:
             /** @noinspection */
             case TextPacket.TYPE_ANNOUNCEMENT:
-                this.writeString(this.source);
+                this.writeString(this.sourceName);
+                this.writeString(this.sourceThirdPartyName);
+                this.writeVarInt(this.sourcePlatform);
             case TextPacket.TYPE_RAW:
             case TextPacket.TYPE_TIP:
             case TextPacket.TYPE_SYSTEM:
@@ -83,6 +91,7 @@ class TextPacket extends DataPacket {
         }
 
         this.writeString(this.xuid);
+        this.writeString(this.platformChatId);
     }
 
     handle(session){

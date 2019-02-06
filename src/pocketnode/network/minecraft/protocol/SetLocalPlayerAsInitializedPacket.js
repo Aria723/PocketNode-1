@@ -17,11 +17,11 @@ class SetLocalPlayerAsInitializedPacket extends DataPacket {
 	}
 
 	_decodePayload(){
-		//todo
+		this.entityRuntimeId = this.getEntityRuntimeId();
 	}
 
 	_encodePayload(){
-        //todo
+        this.writeEntityRuntimeId(this.entityRuntimeId);
 	}
 }
 

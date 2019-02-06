@@ -14,6 +14,7 @@ const LabTablePacket = pocketnode("network/minecraft/protocol/LabTablePacket");
 const UpdateBlockSyncedPacket = pocketnode("network/minecraft/protocol/UpdateBlockSyncedPacket");
 const MoveEntityAbsolutePacket = pocketnode("network/minecraft/protocol/MoveEntityAbsolutePacket");
 const MoveEntityDeltaPacket = pocketnode("network/minecraft/protocol/MoveEntityDeltaPacket");
+const MovePlayerPacket = pocketnode("network/minecraft/protocol/MovePlayerPacket");
 
 class PacketPool {
     constructor(){
@@ -51,7 +52,8 @@ class PacketPool {
 		this.registerPacket(UpdateBlockSyncedPacket);
 		this.registerPacket(SetLocalPlayerAsInitializedPacket);
 		this.registerPacket(MoveEntityAbsolutePacket);
-		this.registerPacket(MoveEntityDeltaPacket);
+        this.registerPacket(MoveEntityDeltaPacket);
+        this.registerPacket(MovePlayerPacket);
     }
 }
 

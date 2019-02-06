@@ -72,7 +72,7 @@ class StartGamePacket extends DataPacket {
         this.entityRuntimeId = this.getEntityRuntimeId();
         this.playerGamemode = this.readVarInt();
 
-        this.playerPosition = this.getVector3Obj();
+        this.playerPosition = this.getVector3();
 
         this.pitch = this.readLFloat();
         this.yaw = this.readLFloat();
@@ -124,7 +124,7 @@ class StartGamePacket extends DataPacket {
         this.writeEntityRuntimeId(this.entityRuntimeId);
         this.writeVarInt(this.playerGamemode);
 
-        this.writeVector3Obj(this.playerPosition);
+        this.writeVector3(this.playerPosition);
 
         this.writeLFloat(this.pitch)
             .writeLFloat(this.yaw);
