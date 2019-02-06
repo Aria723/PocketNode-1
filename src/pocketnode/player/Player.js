@@ -147,10 +147,10 @@ class Player extends CommandSender {
         this._displayName = this._username;
         this._iusername = this._username.toLowerCase();
 
-        //todo: add kick
-        //if(this.server.isFull() && this.kick("Server Full", false)){
-        //    return true;
-        //}
+        /*todo: add kick
+        if(this.server.isFull() && this.kick("Server Full", false)){
+            return true;
+        }*/
 
         this._randomClientId = packet.clientId;
 
@@ -177,6 +177,10 @@ class Player extends CommandSender {
         this._skin = skin;
 
         //todo: if whitelisted/banned kick
+        if(Object.values(this.server.getNameBans().config).indexOf(this._username) !== -1){
+            this.kick("You have been banned", false) //This is not displaying to user...
+            return false;
+        }
 
         Async(function(){
             const MOJANG_ROOT_PUBLIC_KEY = "MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE8ELkixyLcwlZryUQcu1TvPOmI2B7vX83ndnWRUaXm74wFfa5f/lwQNTfrLVHa2PmenpGI6JhIMUJaWZrjmMj90NoKNFSNBuKdm8rYiXsfaz3K36x/1U26HpG0ZxK/V1V";
@@ -290,6 +294,7 @@ class Player extends CommandSender {
         if(this.closed) return;
 
         if(!isValid){
+            //been getting this at random times, may be just my mcpe please confirm.
             this.close("", "Invalid Session");
             return;
         }

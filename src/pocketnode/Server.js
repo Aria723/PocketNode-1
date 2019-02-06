@@ -26,10 +26,10 @@ class Server {
     initVars(){
         this._pocketnode = {};
 
-        this._bannedIps = {};
-        this._bannedNames = {};
-        this._ops = {};
-        this._whitelist = {};
+        this._bannedIps = [];
+        this._bannedNames = [];
+        this._ops = [];
+        this._whitelist = [];
 
         this._running = true;
         this._stopped = false;
@@ -109,10 +109,10 @@ class Server {
 
         //this._scheduler
 
-        this._ops = new Config(this.getDataPath() + "ops.json", Config.JSON);
-        this._whitelist = new Config(this.getDataPath() + "whitelist.json", Config.JSON);
-        this._bannedNames = new Config(this.getDataPath() + "banned-names.json", Config.JSON);
-        this._bannedIps = new Config(this.getDataPath() + "banned-ips.json", Config.JSON);
+        this._ops = new Config(this.getDataPath() + "ops.json", Config.JSON, []);
+        this._whitelist = new Config(this.getDataPath() + "whitelist.json", Config.JSON, []);
+        this._bannedNames = new Config(this.getDataPath() + "banned-names.json", Config.JSON, []);
+        this._bannedIps = new Config(this.getDataPath() + "banned-ips.json", Config.JSON, []);
         this._maxPlayers = this._config.getNested("server.max-players", 20);
         this._onlineMode = this._config.getNested("server.online-mode", true);
 
