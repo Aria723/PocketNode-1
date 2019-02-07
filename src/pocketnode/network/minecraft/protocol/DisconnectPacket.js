@@ -22,7 +22,9 @@ class DisconnectPacket extends DataPacket {
 
     _decodePayload(){
         this.hideDisconnectionScreen = this.readBool();
-        this.message = this.readString();
+        if(!this.hideDisconnectionScreen){
+            this.message = this.readString();
+        }
     }
 
     _encodePayload(){

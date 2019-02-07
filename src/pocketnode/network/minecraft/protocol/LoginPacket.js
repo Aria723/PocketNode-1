@@ -19,6 +19,7 @@ class LoginPacket extends DataPacket {
         this.xuid = "";
         this.identityPublicKey = "";
         this.serverAddress = "";
+        this.locale = "";
 
         this.chainData = [];
         this.clientDataJwt = "";
@@ -64,10 +65,10 @@ class LoginPacket extends DataPacket {
                 if(Isset(webtoken.extraData.XUID)){
                     this.xuid = webtoken.extraData.XUID;
                 }
+            }
 
-                if(Isset(webtoken.identityPublicKey)){
-                    this.identityPublicKey = webtoken.identityPublicKey;
-                }
+            if(Isset(webtoken.identityPublicKey)){
+                this.identityPublicKey = webtoken.identityPublicKey;
             }
         });
 
@@ -76,6 +77,7 @@ class LoginPacket extends DataPacket {
 
         this.clientId = Isset(this.clientData.ClientRandomId) ? this.clientData.ClientRandomId : null;
         this.serverAddress = Isset(this.clientData.ServerAddress) ? this.clientData.ServerAddress : null;
+        this.locale = Isset(this.clientData.LanguageCode) ? this.clientData.LanguageCode : null;
     }
 
     handle(session){

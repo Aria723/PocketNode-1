@@ -20,14 +20,14 @@ class FullChunkDataPacket extends DataPacket {
     _decodePayload(){
         this.chunkX = this.readVarInt();
         this.chunkZ = this.readVarInt();
-        this.data = this.read(this.readUnsignedVarInt());
+        this.data = this.readString();
     }
 
     _encodePayload(){
         this.writeVarInt(this.chunkX)
             .writeVarInt(this.chunkZ)
-            .writeUnsignedVarInt(this.data.length)
-            .append(this.data);
+            .writeString(this.data)/* hmmm both work, however maybe this is required in 1.6+ UnsignedVarInt(this.data.length)
+            .append(this.data);*/
     }
 }
 

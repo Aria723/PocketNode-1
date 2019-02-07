@@ -4,7 +4,7 @@ const ResourcePackDataInfoPacket = pocketnode("network/minecraft/protocol/Resour
 const ResourcePackStackPacket = pocketnode("network/minecraft/protocol/ResourcePackStackPacket");
 const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkDataPacket");
 const PlayStatusPacket = pocketnode("network/minecraft/protocol/PlayStatusPacket");
-
+const DisconnectPacket = pocketnode("network/minecraft/protocol/DisconnectPacket");
 const DataPacketReceiveEvent = pocketnode("event/server/DataPacketReceiveEvent");
 
 const Chunk = pocketnode("level/chunk/Chunk");
@@ -173,6 +173,10 @@ class PlayerSessionAdapter {
 	}
 
 	handleSetLocalPlayerAsInitialized(packet){
+        console.log("Player has finished login/spawn and is now in")
+        let pk = new DisconnectPacket();
+        pk.message = "Banned";  //THIS WORKS !
+        this.player.dataPacket(pk);
 		return false;
 	}
     

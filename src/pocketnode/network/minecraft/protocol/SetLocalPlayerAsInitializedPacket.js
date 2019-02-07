@@ -23,6 +23,10 @@ class SetLocalPlayerAsInitializedPacket extends DataPacket {
 	_encodePayload(){
         this.writeEntityRuntimeId(this.entityRuntimeId);
 	}
+
+	handle(session){
+        return session.handleSetLocalPlayerAsInitialized(this);
+    }
 }
 
 module.exports = SetLocalPlayerAsInitializedPacket;

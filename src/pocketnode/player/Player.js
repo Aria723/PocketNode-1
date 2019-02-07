@@ -147,10 +147,11 @@ class Player extends CommandSender {
         this._displayName = this._username;
         this._iusername = this._username.toLowerCase();
 
-        /*todo: add kick
-        if(this.server.isFull() && this.kick("Server Full", false)){
+        //todo: add kick
+        if(this.server.isFull()){
+            this.sendPlayStatus(PlayStatusPacket.LOGIN_FAILED_SERVER_FULL);
             return true;
-        }*/
+        }
 
         this._randomClientId = packet.clientId;
 
@@ -178,7 +179,7 @@ class Player extends CommandSender {
 
         //todo: if whitelisted/banned kick
         if(Object.values(this.server.getNameBans().config).indexOf(this._username) !== -1){
-            this.kick("You have been banned", false) //This is not displaying to user...
+            this.close("Your banned.", "Your banned", true) //This is not displaying to user...
             return false;
         }
 
@@ -294,7 +295,6 @@ class Player extends CommandSender {
         if(this.closed) return;
 
         if(!isValid){
-            //been getting this at random times, may be just my mcpe please confirm.
             this.close("", "Invalid Session");
             return;
         }
