@@ -173,11 +173,8 @@ class PlayerSessionAdapter {
 	}
 
 	handleSetLocalPlayerAsInitialized(packet){
-        console.log("Player has finished login/spawn and is now in")
-        let pk = new DisconnectPacket();
-        pk.message = "Banned";  //THIS WORKS !
-        this.player.dataPacket(pk);
-		return false;
+        this.server.getLogger().debug("Player has joined.")
+        return false;
 	}
     
     handleRemoveObjective(packet){

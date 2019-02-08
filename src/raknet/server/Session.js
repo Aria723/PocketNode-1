@@ -390,12 +390,13 @@ class Session {
 		pk.orderChannel = orderChannel;
 		pk.stream = new BinaryStream(packet.getBuffer());
 
-		//this.sessionManager.getLogger().debug("Queuing "+protocol.constructor.name+"("+protocol.getBuffer().toString("hex")+")");
+		//this.sessionManager.getLogger().debug("Queuing "+packet.constructor.name+"("+packet.getBuffer().toString("hex")+")");
 
 		this.addEncapsulatedToQueue(pk, flags);
 	}
 
 	queueConnectedPacketFromServer(packet, needACK, immediate){
+		//console.log(immediate) if immediate it doesnt seem to do anything (client doesnt recieve i think / OR it doesnt do anything with it)
 		return this.queueConnectedPacket(packet, (needACK === true ? RakNet.FLAG_NEED_ACK : 0) | (immediate === true ? RakNet.PRIORITY_IMMEDIATE : RakNet.PRIORITY_NORMAL));
 	}
 

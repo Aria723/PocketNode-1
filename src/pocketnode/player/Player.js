@@ -147,7 +147,6 @@ class Player extends CommandSender {
         this._displayName = this._username;
         this._iusername = this._username.toLowerCase();
 
-        //todo: add kick
         if(this.server.isFull()){
             this.sendPlayStatus(PlayStatusPacket.LOGIN_FAILED_SERVER_FULL);
             return true;
@@ -179,7 +178,7 @@ class Player extends CommandSender {
 
         //todo: if whitelisted/banned kick
         if(Object.values(this.server.getNameBans().config).indexOf(this._username) !== -1){
-            this.close("Your banned.", "Your banned", true) //This is not displaying to user...
+            this.close("Banned", "You are currently banned from this server.", true)
             return false;
         }
 
@@ -415,7 +414,8 @@ class Player extends CommandSender {
                 if(notify && reason.length > 0){
                     let pk = new DisconnectPacket();
                     pk.message = reason;
-                    this.directDataPacket(pk);
+                    this.dataPacket(pk);
+                    //this.directDataPacket(pk); figure out why no direct data packets work.
                 }
 
                 this._sessionAdapter = null;
