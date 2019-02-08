@@ -159,6 +159,8 @@ class Server {
 
         this.getLogger().info("Done ("+(Date.now() - this._pocketnode.START_TIME)+"ms)!");
 
+        this.getLogger().info("This is a developing server software, meaning it can change without notice and will probably break a few things, use at your own risk.");
+
         this.tickProcessor();
         //this.forceShutdown();
     }

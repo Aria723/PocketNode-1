@@ -1,5 +1,5 @@
 # PocketNode
-[![Travis](https://img.shields.io/travis/TwistedAslyumMC/PocketNode/master-1.5.svg?style=for-the-badge)](https://travis-ci.org/TwistedAslyumMC/PocketNode)
+[![Travis](https://img.shields.io/travis/TwistedAsylumMC/PocketNode/master.svg?style=for-the-badge)](https://travis-ci.org/TwistedAsylumMC/PocketNode)
 
 ## What's This?
 PocketNode is a server software for Minecraft: Bedrock written in node.js
