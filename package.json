@@ -1,6 +1,6 @@
 {
   "name": "pocketnode",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Server software written in Javascript for Minecraft: PE",
   "main": "src/pocketnode/PocketNode.js",
   "scripts": {
