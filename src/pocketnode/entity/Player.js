@@ -19,6 +19,7 @@ const GameRule = pocketnode("level/GameRule");
 
 const Vector3 = pocketnode("math/Vector3");
 
+const Entity = pocketnode("entity/Entity");
 const Skin = pocketnode("entity/Skin");
 
 const TextFormat = pocketnode("utils/TextFormat");
@@ -26,7 +27,7 @@ const Base64 = pocketnode("utils/Base64");
 
 const Async = pocketnode("utils/Async");
 
-class Player extends CommandSender {
+class Player extends multiple(Entity, CommandSender) {
     static get SURVIVAL(){return 0}
     static get CREATIVE(){return 1}
     static get ADVENTURE(){return 2}
@@ -69,7 +70,8 @@ class Player extends CommandSender {
     }
     
     constructor(server, clientId, ip, port){
-        super(server);
+        super();
+        this.server = server;
         this.initVars();
         this._clientId = clientId;
         this._ip = ip;
@@ -77,6 +79,10 @@ class Player extends CommandSender {
         this.creationTime = Date.now();
 
         this._sessionAdapter = new PlayerSessionAdapter(this);
+    }
+
+    getServer(){
+        return this.server;
     }
 
     getLeaveMessage(){
@@ -574,6 +580,20 @@ class Player extends CommandSender {
         pk.chunkZ = chunk.getZ();
         pk.data = chunk.toBinary();
         this.dataPacket(pk);
+    }
+
+    canBreathe(){
+        // TODO: Has water breathing effect, Conduit power or under water
+        return true;
+    }
+
+    isBreathing(){
+        // Return generic flag DATA_FLAG_BREATHING
+        return true;
+    }
+
+    setBreathing(value = true){
+        // Set generic flag DATA_FLAG_BREATHING
     }
     
     /**

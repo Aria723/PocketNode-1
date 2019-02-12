@@ -11,8 +11,8 @@ const BatchPacket = pocketnode("network/minecraft/protocol/BatchPacket");
 const CommandMap = pocketnode("command/CommandMap");
 const ConsoleCommandReader = pocketnode("command/ConsoleCommandReader")
 
-const Player = pocketnode("player/Player");
-const PlayerList = pocketnode("player/PlayerList");
+const Player = pocketnode("entity/Player");
+const PlayerList = pocketnode("PlayerList");
 
 const ResourcePackManager = pocketnode("resourcepacks/ResourcePackManager");
 

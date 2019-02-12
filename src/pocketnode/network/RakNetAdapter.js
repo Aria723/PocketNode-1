@@ -5,8 +5,8 @@ const Logger = pocketnode("logger/Logger");
 const PacketPool = pocketnode("network/minecraft/protocol/PacketPool");
 const BatchPacket = pocketnode("network/minecraft/protocol/BatchPacket");
 
-const Player = pocketnode("player/Player");
-const PlayerList = pocketnode("player/PlayerList");
+const Player = pocketnode("entity/Player");
+const PlayerList = pocketnode("PlayerList");
 
 class RakNetAdapter {
     constructor(server){

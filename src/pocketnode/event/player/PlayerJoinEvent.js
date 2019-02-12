@@ -1,5 +1,5 @@
 const PlayerEvent = pocketnode("event/PlayerEvent");
-const Player = pocketnode("player/Player");
+const Player = pocketnode("entity/Player");
 
 /**
  * Called when a player joins the server, after sending all the spawn packets
