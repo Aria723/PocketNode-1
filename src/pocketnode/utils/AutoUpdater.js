@@ -79,7 +79,7 @@ class AutoUpdater {
         try{
             let data = await axios.get(this.url, this.opts);
             data = data.data[0]
-            if(VersionCompare(this.version, data.tag_name)){
+            if(VersionCompare(this.version, data.tag_name) === -1){
                 this.processUpdate(data);
                 return;
             } else {
