@@ -11,6 +11,10 @@
       "type": "flat"
     }
   },
+  "updating": {
+    "enabled": true,
+    "auto-update": false
+  },
   "network": {
     "batch-threshold": 256,
     "compression-level": 7

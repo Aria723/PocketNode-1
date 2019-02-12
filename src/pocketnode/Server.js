@@ -21,6 +21,7 @@ const GeneratorManager = pocketnode("level/generator/GeneratorManager");
 const FlatGenerator = pocketnode("level/generator/FlatGenerator");
 
 const SFS = pocketnode("utils/SimpleFileSystem");
+const Updater = pocketnode("utils/AutoUpdater");
 
 class Server {
     initVars(){
@@ -159,10 +160,34 @@ class Server {
 
         this.getLogger().info("Done ("+(Date.now() - this._pocketnode.START_TIME)+"ms)!");
 
-        this.getLogger().info("This is a developing server software, meaning it can change without notice and will probably break a few things, use at your own risk.");
+        this.getLogger().warning("This is a developing server software, meaning it can change without notice and will probably break a few things, use at your own risk.");
+
+        //Check for updates:
+        this.runUpdateCheck(); //public function so plugins can run it at any time.
 
         this.tickProcessor();
         //this.forceShutdown();
+    }
+
+    runUpdateCheck(){
+        let enabled = this._config.getNested("updating.enabled", "Invalid");
+        let auto = this._config.getNested("updating.auto-update", "Invalid");
+        if(enabled === "Invalid" || auto === "Invalid"){
+            this.getLogger().warning("Update config is corrupt or cannot be found, be sure you have the latest config and has valid options.");
+            enabled = enabled === "Invalid" || enabled === true;
+            auto = auto === "Invalid" || auto === true;
+        }
+
+        if(!enabled){
+            return true
+        }
+
+        this.getLogger().debug("Checking for updates.");
+
+        let AutoUpdater = new Updater(this, auto)
+        AutoUpdater.start()
+
+        this.getLogger().debug("Update check complete.");
     }
 
     registerDefaultCommands(){
@@ -181,7 +206,7 @@ class Server {
         return this._running;
     }
 
-    shutdown(){
+    shutdown(exit = true){
         if(!this._running) return;
 
         this.getLogger().info("Shutting down...");
@@ -192,7 +217,11 @@ class Server {
 
         this.getLogger().info("Server Turned off.");
 
-        process.exit(0); // fix this later
+        if(exit){
+            process.exit(0); // fix this later
+        } else {
+            return true
+        }
     }
 
     /**

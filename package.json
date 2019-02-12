@@ -1,6 +1,6 @@
 {
   "name": "pocketnode",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Server software written in Javascript for Minecraft: PE",
   "main": "src/pocketnode/PocketNode.js",
   "scripts": {
@@ -18,7 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "time-stamp": "^2.0.0"
+    "time-stamp": "^2.0.0",
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "jsdoc": "^3.4.0"

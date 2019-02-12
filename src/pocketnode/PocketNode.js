@@ -9,7 +9,7 @@ function PocketNode(paths){
 	this.START_TIME = Date.now();
 	this.NAME = "PocketNode";
 	this.CODENAME = "[BEGINNINGS]";
-	this.VERSION = "0.0.6";
+	this.VERSION = "0.0.7";
 	this.API_VERSION = "1.0.0";
 
     let logger = new Logger("Server");
@@ -21,7 +21,7 @@ function PocketNode(paths){
 
     for(let i in paths) if(typeof path[i] !== "undefined") path[i] = paths[i];
 
-    logger.info("Starting PocketNode "+this.version);
+    logger.info("Starting PocketNode "+this.VERSION);
 
     let server = new Server(this, logger, path);
     if(TRAVIS_BUILD === true){
