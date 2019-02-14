@@ -108,6 +108,10 @@ class Server {
 
         this.getLogger().setDebugging(this._debuggingLevel);
 
+        if(TRAVIS_BUILD){
+            this.getLogger().setDebugging(2);
+        }
+
         //this._scheduler
 
         this._ops = new Config(this.getDataPath() + "ops.json", Config.JSON, []);

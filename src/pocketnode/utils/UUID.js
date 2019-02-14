@@ -40,3 +40,5 @@ class UUID {
         return this._parts[i] ? this._parts[i] : null;
     }
 }
+
+module.exports = UUID;

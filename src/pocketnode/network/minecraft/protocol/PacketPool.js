@@ -15,6 +15,14 @@ const UpdateBlockSyncedPacket = pocketnode("network/minecraft/protocol/UpdateBlo
 const MoveEntityAbsolutePacket = pocketnode("network/minecraft/protocol/MoveEntityAbsolutePacket");
 const MoveEntityDeltaPacket = pocketnode("network/minecraft/protocol/MoveEntityDeltaPacket");
 const MovePlayerPacket = pocketnode("network/minecraft/protocol/MovePlayerPacket");
+const ChunkRadiusUpdatedPacket = pocketnode("network/minecraft/protocol/ChunkRadiusUpdatedPacket");
+const CommandOutputPacket = pocketnode("network/minecraft/protocol/CommandOutputPacket");
+const CommandRequestPacket = pocketnode("network/minecraft/protocol/CommandRequestPacket");
+const FullChunkDataPacket = pocketnode("network/minecraft/protocol/FullChunkDataPacket");
+const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkDataPacket");
+const ResourcePackDataInfoPacket = pocketnode("network/minecraft/protocol/ResourcePackDataInfoPacket");
+const ResourcePackStackPacket = pocketnode("network/minecraft/protocol/ResourcePackStackPacket");
+const StartGamePacket = pocketnode("network/minecraft/protocol/StartGamePacket");
 
 class PacketPool {
     constructor(){
@@ -54,6 +62,14 @@ class PacketPool {
 		this.registerPacket(MoveEntityAbsolutePacket);
         this.registerPacket(MoveEntityDeltaPacket);
         this.registerPacket(MovePlayerPacket);
+        this.registerPacket(ChunkRadiusUpdatedPacket);
+        this.registerPacket(CommandOutputPacket);
+        this.registerPacket(CommandRequestPacket);
+        this.registerPacket(FullChunkDataPacket);
+        this.registerPacket(ResourcePackChunkDataPacket);
+        this.registerPacket(ResourcePackDataInfoPacket);
+        this.registerPacket(ResourcePackStackPacket);
+        this.registerPacket(StartGamePacket);
     }
 }
 

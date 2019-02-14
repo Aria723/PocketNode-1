@@ -4,7 +4,6 @@ const ResourcePackDataInfoPacket = pocketnode("network/minecraft/protocol/Resour
 const ResourcePackStackPacket = pocketnode("network/minecraft/protocol/ResourcePackStackPacket");
 const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/ResourcePackChunkDataPacket");
 const PlayStatusPacket = pocketnode("network/minecraft/protocol/PlayStatusPacket");
-const DisconnectPacket = pocketnode("network/minecraft/protocol/DisconnectPacket");
 const DataPacketReceiveEvent = pocketnode("event/server/DataPacketReceiveEvent");
 
 const Chunk = pocketnode("level/chunk/Chunk");
@@ -163,6 +162,11 @@ class PlayerSessionAdapter {
 
         return false;
     }
+    
+    handleCommandRequest(packet){
+        //Command used process in player chat.
+        return this.player.chat(packet.command)
+    }
 	
 	handleMoveEntityDelta(packet){
 		return false;
@@ -173,7 +177,8 @@ class PlayerSessionAdapter {
 	}
 
 	handleSetLocalPlayerAsInitialized(packet){
-        this.server.getLogger().debug("Player has joined.")
+        //sent when client has spawned and can see the world.
+        this.server.getLogger().debug("Player has spawned into game.")
         return false;
 	}
     

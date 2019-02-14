@@ -1,3 +1,4 @@
+const CommandOriginData = pocketnode("network/minecraft/protocol/classes/CommandOriginData");
 const BinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 const Vector3 = pocketnode("math/Vector3");
 
@@ -166,6 +167,27 @@ class DataPacket extends BinaryStream {
 
         return this;
     }
+
+    readCommandOriginData(){
+		let result = new CommandOriginData();
+		result.type = this.readUnsignedVarInt();
+		result.uuid =  this.readUUID();
+		result.requestId = this.readString();
+		if(result.type === CommandOriginData.ORIGIN_DEV_CONSOLE || result.type === CommandOriginData.ORIGIN_TEST){
+			result.varlong1 = this.readVarLong();
+		}
+		return result;
+	}
+    
+    writeCommandOriginData(data){
+		this.writeUnsignedVarInt(data.type);
+		this.writeUUID(data.uuid);
+		this.writeString(data.requestId);
+		if(data.type === CommandOriginData.ORIGIN_DEV_CONSOLE || data.type === CommandOriginData.ORIGIN_TEST){
+			this.writeVarLong(data.varlong1);
+		}
+	}
+
 
     handle(session){
         return false;
