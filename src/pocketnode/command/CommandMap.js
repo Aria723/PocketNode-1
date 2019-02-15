@@ -1,3 +1,4 @@
+const Player = pocketnode("entity/Player");
 const Command = pocketnode("command/Command");
 const CommandSender = pocketnode("command/CommandSender");
 const InvalidParameterError = pocketnode("error/InvalidParameterError");
@@ -113,14 +114,14 @@ class CommandMap {
              let command = this.commands.get(cmd);
              if(command.getArguments().filter(arg => arg.isRequired()).length > 0){
                  if(args.length > 0){
-                     if(sender instanceof CommandSender){
+                     if(sender instanceof CommandSender || sender instanceof Player){
                          command.execute(sender, args);
                      }
                  }else{
                     sender.sendMessage(command.getUsage());
                  }
              }else{
-                 if(sender instanceof CommandSender){
+                 if(sender instanceof CommandSender || sender instanceof Player){
                      command.execute(sender, args);
                  }
              }
@@ -128,14 +129,14 @@ class CommandMap {
             let command = this.aliases.get(cmd);
             if(command.getArguments().filter(arg => arg.isRequired()).length > 0){
                 if(args.length > 0){
-                    if(sender instanceof CommandSender){
+                    if(sender instanceof CommandSender || sender instanceof Player){
                         command.execute(sender, args);
                     }
                 }else{
                     sender.sendMessage(command.getUsage());
                 }
             }else{
-                if(sender instanceof CommandSender){
+                if(sender instanceof CommandSender || sender instanceof Player){
                     command.execute(sender, args);
                 }
             }
