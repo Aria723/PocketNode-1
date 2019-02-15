@@ -6,6 +6,7 @@ class StopCommand extends Command {
     }
 
     execute(sender, args){
+        sender.sendMessage("§cServer shutting down.")
         sender.getServer().shutdown();
     }
 }

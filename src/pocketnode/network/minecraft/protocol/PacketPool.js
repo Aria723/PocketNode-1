@@ -23,6 +23,7 @@ const ResourcePackChunkDataPacket = pocketnode("network/minecraft/protocol/Resou
 const ResourcePackDataInfoPacket = pocketnode("network/minecraft/protocol/ResourcePackDataInfoPacket");
 const ResourcePackStackPacket = pocketnode("network/minecraft/protocol/ResourcePackStackPacket");
 const StartGamePacket = pocketnode("network/minecraft/protocol/StartGamePacket");
+const AvailableCommandsPacket = pocketnode("network/minecraft/protocol/AvailableCommandsPacket");
 
 class PacketPool {
     constructor(){
@@ -70,6 +71,7 @@ class PacketPool {
         this.registerPacket(ResourcePackDataInfoPacket);
         this.registerPacket(ResourcePackStackPacket);
         this.registerPacket(StartGamePacket);
+        this.registerPacket(AvailableCommandsPacket);
     }
 }
 

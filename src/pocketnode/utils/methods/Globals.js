@@ -15,6 +15,20 @@ global.raknet = function(path){
 	return require(Path.normalize(__dirname + "/../../../raknet/" + path));
 };
 
+global.flipArray = function(trans) {
+    var key
+    var tmpArr = {}
+  
+    for (key in trans) {
+      if (!trans.hasOwnProperty(key)) {
+        continue
+      }
+      tmpArr[trans[key]] = key
+    }
+  
+    return tmpArr
+}
+
 global.multiple = function(baseClass, ...mixins){
 	class base extends baseClass {
 		constructor (...args) {

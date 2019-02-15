@@ -179,6 +179,7 @@ class PlayerSessionAdapter {
 	handleSetLocalPlayerAsInitialized(packet){
         //sent when client has spawned and can see the world.
         this.server.getLogger().debug("Player has spawned into game.")
+        //this.player.sendCommandData();
         return false;
 	}
     

@@ -12,6 +12,11 @@ const StartGamePacket = pocketnode("network/minecraft/protocol/StartGamePacket")
 const ChunkRadiusUpdatedPacket = pocketnode("network/minecraft/protocol/ChunkRadiusUpdatedPacket");
 const TextPacket = pocketnode("network/minecraft/protocol/TextPacket");
 const FullChunkDataPacket =  pocketnode("network/minecraft/protocol/FullChunkDataPacket");
+const AvailableCommandsPacket = pocketnode("network/minecraft/protocol/AvailableCommandsPacket");
+
+const CommandData = pocketnode("network/minecraft/protocol/classes/CommandData");
+const CommandParameter = pocketnode("network/minecraft/protocol/classes/CommandParameter");
+const CommandEnum = pocketnode("network/minecraft/protocol/classes/CommandEnum");
 
 const DataPacketSendEvent = pocketnode("event/server/DataPacketSendEvent");
 
@@ -534,6 +539,8 @@ class Player extends multiple(Entity, CommandSender) {
         this.server.addOnlinePlayer(this);
         this.server.onPlayerCompleteLoginSequence(this);
 
+        this.player.sendCommandData();
+
         //this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN);
     }
 
@@ -595,6 +602,40 @@ class Player extends multiple(Entity, CommandSender) {
     setBreathing(value = true){
         // Set generic flag DATA_FLAG_BREATHING
     }
+
+    sendCommandData(){
+        let packet = new AvailableCommandsPacket();
+        let commands = this.server.getCommandMap().getCommands();
+        for(let i = 0; i < commands.length; i += 1){
+            let command = commands[i];
+			if(packet.commandData[command.getName()] != null || command.getName() === "help"){
+				continue;
+			}
+			let data = new CommandData();
+			data.commandName = command.getName();
+			data.commandDescription = command.getDescription();
+			data.flags = 0;
+			data.permission = 0;
+			let parameter = new CommandParameter();
+			parameter.paramName = "args";
+			parameter.paramType = AvailableCommandsPacket.ARG_FLAG_VALID | AvailableCommandsPacket.ARG_TYPE_RAWTEXT;
+			parameter.isOptional = true;
+            data.overloads[0] = {}
+            data.overloads[0][0] = parameter;
+			let aliases = command.getAliases();
+			if(aliases !== []){
+				if(aliases.indexOf(data.commandName) !== -1){
+					aliases.push(data.commandName);
+				}
+				data.aliases = new CommandEnum();
+				data.aliases.enumName = command.getName().charAt(0).toUpperCase() + command.getName().substr(1)+"Aliases";
+				data.aliases.enumValues = aliases;
+			}
+			packet.commandData[command.getName()] = data;
+        }
+        console.log(packet);
+		this.dataPacket(packet);
+	}
     
     /**
      * @return {PlayerSessionAdapter}

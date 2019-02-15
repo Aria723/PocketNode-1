@@ -141,7 +141,7 @@ class CommandMap {
                 }
             }
         }else{
-            sender.sendMessage("§4Command Not Found. Try /help for a list of commands.");
+            sender.sendMessage("§cCommand Not Found. Try /help for a list of commands.");
         }
     }
 }
