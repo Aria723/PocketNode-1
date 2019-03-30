@@ -8,14 +8,14 @@
  *
  *  @author PocketNode Team
  *  @link https://pocketnode.me
- */
+*/
 
 const Position = pocketnode("level/Position");
 
 class Location extends Position {
-	/**
-	 * Represents a Position with added Yaw and Pitch references
-	 * @constructor
+    /**
+     * Represents a Position with added Yaw and Pitch references
+     * @constructor
 	 * @param {Number}   x
 	 * @param {Number}   y
 	 * @param {Number}   z
@@ -24,58 +24,58 @@ class Location extends Position {
 	 * @param {Level}    level
 	 */
 
-	/**
-	 * @param x     {Number}
-	 * @param y     {Number}
-	 * @param z     {Number}
-	 * @param yaw   {Number}
-	 * @param pitch {Number}
-	 * @param level {Level}
-	 */
+    /**
+     * @param x     {Number}
+     * @param y     {Number}
+     * @param z     {Number}
+     * @param yaw   {Number}
+     * @param pitch {Number}
+     * @param level {Level}
+     */
 	constructor(x = 0, y = 0, z = 0, yaw = 0.0, pitch = 0.0, level = null){
-		super(x, y, z, level);
+        super(x, y, z, level);
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
 
-	/**
-	 * @param pos   {Vector3}
-	 * @param level {Level|null}
-	 * @param yaw   {Number}
-	 * @param pitch {Number}
-	 *
-	 * @return {Location}
-	 */
-	static fromObject(pos, level = null, yaw = 0.0, pitch = 0.0){
-		return new Location(pos.x, pos.y, pos.z, yaw, pitch, (level === null ? (pos instanceof Position ? pos.level : null) : level));
-	}
+    /**
+     * @param pos   {Vector3}
+     * @param level {Level|null}
+     * @param yaw   {Number}
+     * @param pitch {Number}
+     *
+     * @return {Location}
+     */
+    static fromObject(pos, level = null, yaw = 0.0, pitch = 0.0){
+        return new Location(pos.x, pos.y, pos.z, yaw, pitch, (level === null ? (pos instanceof Position ? pos.level : null) : level));
+    }
 
-	/**
-	 * Return a Location instance
-	 *
-	 * @return {Location}
-	 */
-	asLocation(){
-		return new Location(this.x, this.y, this.z, this.yaw, this.pitch, this.level);
-	}
+    /**
+    * Return a Location instance
+    *
+    * @return {Location}
+    */
+    asLocation(){
+        return new Location(this.x, this.y, this.z, this.yaw, this.pitch, this.level);
+    }
 
-	getYaw(){
-		return this.yaw;
-	}
+    getYaw(){
+        return this.yaw;
+    }
 
-	getPitch(){
-		return this.pitch;
-	}
+    getPitch(){
+        return this.pitch;
+    }
 
-	toString(){
-		return "Location (level=" + (this.isValid() ? this.getLevel().getName() : "null") + ", x=" + this.x + ", y=" + this.y + ", z=" + this.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ")";
-	}
-
-	equals(v){
-		if(v instanceof Location){
-			return super.equals(v) && v.yaw === this.yaw && v.pitch === this.pitch;
-		}
-		return super.equals(v);
-	}
+    toString(){
+        return "Location (level=" + (this.isValid() ? this.getLevel().getName() : "null") + ", x=" + this.x + ", y=" + this.y + ", z=" + this.z + ", yaw=" + this.yaw + ", pitch=" + this.pitch + ")";
+    }
+    
+    equals(v){
+        if(v instanceof Location){
+            return super.equals(v) && v.yaw === this.yaw && v.pitch === this.pitch;
+        }
+        return super.equals(v);
+    }
 
 }

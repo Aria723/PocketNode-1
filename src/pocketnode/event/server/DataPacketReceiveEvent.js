@@ -2,35 +2,35 @@ const ServerEvent = pocketnode("event/server/ServerEvent");
 const DataPacket = pocketnode("network/minecraft/protocol/DataPacket");
 
 class DataPacketReceiveEvent extends ServerEvent {
-	/**
-	 * @param {Player}     player
-	 * @param {DataPacket} packet
-	 */
-	constructor(player, packet){
-		super();
-		CheckTypes([DataPacket, packet]);
+    isCancellable(){
+        return true;
+    }
 
-		this._player = player;
-		this._packet = packet;
-	}
+    /**
+     * @param {Player}     player
+     * @param {DataPacket} packet
+     */
+    constructor(player, packet){
+        super();
+        CheckTypes([DataPacket, packet]);
 
-	isCancellable(){
-		return true;
-	}
+        this._player = player;
+        this._packet = packet;
+    }
 
-	/**
-	 * @return {Player}
-	 */
-	getPlayer(){
-		return this._player;
-	}
+    /**
+     * @return {Player}
+     */
+    getPlayer(){
+        return this._player;
+    }
 
-	/**
-	 * @return {DataPacket}
-	 */
-	getPacket(){
-		return this._packet;
-	}
+    /**
+     * @return {DataPacket}
+     */
+    getPacket(){
+        return this._packet;
+    }
 }
 
 module.exports = DataPacketReceiveEvent;

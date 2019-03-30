@@ -169,7 +169,7 @@ class SessionManager {
 			this._bytes.sent += this._socket.sendBuffer(packet.getStream().getBuffer(), address, port);
 		}
 
-		//this.getLogger().debug("Sent "+protocol.constructor.name+"("+protocol.stream.buffer.toString("hex")+") to "+address+":"+port);
+		//this.getLogger().debug("Sent "+packet.constructor.name+"("+packet.stream.buffer.toString("hex")+") to "+address+":"+port);
 	}
 
 	createSession(address, port, clientId, mtuSize){

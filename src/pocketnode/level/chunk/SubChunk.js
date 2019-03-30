@@ -1,150 +1,152 @@
 const SubChunkInterface = pocketnode("level/chunk/SubChunkInterface");
 
 class SubChunk extends SubChunkInterface {
-	constructor(blockIds = [], blockData = [], blockLight = [], skyLight = []){
-		super();
+    initVars(){
+        this._blockIds = [];
+        this._blockData = [];
+        this._blockLight = [];
+        this._skyLight = [];
+    }
 
-		if(blockIds.length === 0 || blockIds.length !== 4096){
-			this._blockIds = new Array(4096).fill(0x00);
-		}
+    constructor(blockIds = [], blockData = [], blockLight = [], skyLight = []){
+        super();
 
-		if(blockData.length === 0 || blockData.length !== 2048){
-			this._blockData = new Array(2048).fill(0x00);
-		}
+        if(blockIds.length === 0 || blockIds.length !== 4096){
+            this._blockIds = new Array(4096).fill(0x00);
+        }
 
-		if(blockLight.length === 0 || blockLight.length !== 2048){
-			this._blockLight = new Array(2048).fill(0x00);
-		}
+        if(blockData.length === 0 || blockData.length !== 2048){
+            this._blockData = new Array(2048).fill(0x00);
+        }
 
-		if(skyLight.length === 0 || skyLight.length !== 2048){
-			this._skyLight = new Array(2048).fill(0xff);
-		}
-	}
+        if(blockLight.length === 0 || blockLight.length !== 2048){
+            this._blockLight = new Array(2048).fill(0x00);
+        }
 
-	static getIdIndex(x, y, z){
-		return (x << 8) | (z << 4) | y;
-	}
+        if(skyLight.length === 0 || skyLight.length !== 2048){
+            this._skyLight = new Array(2048).fill(0xff);
+        }
+    }
 
-	static getDataIndex(x, y, z){
-		return (x << 7) + (z << 3) + (y >> 1);
-	}
+    isEmpty(checkLight = true){
+        return (
+            this._blockIds.filter(id => id === 0x00).length === 4096 &&
+            (!checkLight || (
+                this._blockLight.filter(id => id === 0x00).length === 2048 &&
+                this._skyLight.filter(id => id === 0xff).length === 2048
+            ))
+        );
+    }
 
-	static getLightIndex(x, y, z){
-		return SubChunk.getDataIndex(x, y, z);
-	}
+    getBlockId(x, y, z){
+        return this._blockIds[SubChunk.getIdIndex(x, y, z)];
+    }
 
-	initVars(){
-		this._blockIds = [];
-		this._blockData = [];
-		this._blockLight = [];
-		this._skyLight = [];
-	}
+    setBlockId(x, y, z, id){
+        this._blockIds[SubChunk.getIdIndex(x, y, z)] = id;
+        return true;
+    }
 
-	isEmpty(checkLight = true){
-		return (
-			this._blockIds.filter(id => id === 0x00).length === 4096 &&
-			(!checkLight || (
-				this._blockLight.filter(id => id === 0x00).length === 2048 &&
-				this._skyLight.filter(id => id === 0xff).length === 2048
-			))
-		);
-	}
+    getBlockData(x, y, z){
+        let m = this._blockData[SubChunk.getDataIndex(x, y, z)];
+        if((y & 1) === 0){
+            return m & 0x0f;
+        }else{
+            return m >> 4;
+        }
+    }
 
-	getBlockId(x, y, z){
-		return this._blockIds[SubChunk.getIdIndex(x, y, z)];
-	}
+    setBlockData(x, y, z, data){
+        let i = SubChunk.getDataIndex(x, y, z);
+        if((y & 1) === 0){
+            this._blockData[i] = (this._blockData[i] & 0xf0) | (data & 0x0f);
+        }else{
+            this._blockData[i] = (((data & 0x0f) << 4) | this._blockData[i] & 0x0f);
+        }
+        return true;
+    }
 
-	setBlockId(x, y, z, id){
-		this._blockIds[SubChunk.getIdIndex(x, y, z)] = id;
-		return true;
-	}
+    getBlockLight(x, y, z){
+        let byte = this._blockLight[SubChunk.getLightIndex(x, y, z)];
+        if((y & 1) === 0){
+            return byte & 0x0f;
+        }else{
+            return byte >> 4;
+        }
+    }
 
-	getBlockData(x, y, z){
-		let m = this._blockData[SubChunk.getDataIndex(x, y, z)];
-		if((y & 1) === 0){
-			return m & 0x0f;
-		}else{
-			return m >> 4;
-		}
-	}
+    setBlockLight(x, y, z, level){
+        let i = SubChunk.getLightIndex(x, y, z);
+        let byte = this._blockLight[i];
+        if((y & 1) === 0){
+            this._blockLight[i] = (byte & 0xf0) | (level & 0x0f);
+        }else{
+            this._blockLight[i] = ((level & 0x0f) << 4) | (byte & 0x0f);
+        }
+        return true;
+    }
 
-	setBlockData(x, y, z, data){
-		let i = SubChunk.getDataIndex(x, y, z);
-		if((y & 1) === 0){
-			this._blockData[i] = (this._blockData[i] & 0xf0) | (data & 0x0f);
-		}else{
-			this._blockData[i] = (((data & 0x0f) << 4) | this._blockData[i] & 0x0f);
-		}
-		return true;
-	}
+    getBlockSkyLight(x, y, z){
+        let byte = this._skyLight[SubChunk.getLightIndex(x, y, z)];
+        if((y & 1) === 0){
+            return byte & 0x0f;
+        }else{
+            return byte >> 4;
+        }
+    }
 
-	getBlockLight(x, y, z){
-		let byte = this._blockLight[SubChunk.getLightIndex(x, y, z)];
-		if((y & 1) === 0){
-			return byte & 0x0f;
-		}else{
-			return byte >> 4;
-		}
-	}
+    setBlockSkyLight(x, y, z, level){
+        let i = SubChunk.getLightIndex(x, y, z);
+        let byte = this._skyLight[i];
+        if((y & 0x01) === 0){
+            this._skyLight[i] = (byte & 0xf0) | (level & 0x0f);
+        }else{
+            this._skyLight[i] = ((level & 0x0f) << 4) | (byte & 0x0f);
+        }
+        return true;
+    }
 
-	setBlockLight(x, y, z, level){
-		let i = SubChunk.getLightIndex(x, y, z);
-		let byte = this._blockLight[i];
-		if((y & 1) === 0){
-			this._blockLight[i] = (byte & 0xf0) | (level & 0x0f);
-		}else{
-			this._blockLight[i] = ((level & 0x0f) << 4) | (byte & 0x0f);
-		}
-		return true;
-	}
+    getHighestBlockId(x, z){
+        for(let y = 15; y >= 0; y--){
+            let id = this.getBlockId(x, y, z);
+            if(id !== 0){
+                return id;
+            }
+        }
+        return 0;
+    }
 
-	getBlockSkyLight(x, y, z){
-		let byte = this._skyLight[SubChunk.getLightIndex(x, y, z)];
-		if((y & 1) === 0){
-			return byte & 0x0f;
-		}else{
-			return byte >> 4;
-		}
-	}
+    getHighestBlockData(x, z){
+        return this.getBlockData(x, 15, z);
+    }
 
-	setBlockSkyLight(x, y, z, level){
-		let i = SubChunk.getLightIndex(x, y, z);
-		let byte = this._skyLight[i];
-		if((y & 0x01) === 0){
-			this._skyLight[i] = (byte & 0xf0) | (level & 0x0f);
-		}else{
-			this._skyLight[i] = ((level & 0x0f) << 4) | (byte & 0x0f);
-		}
-		return true;
-	}
+    getHighestBlock(x, z){
+        for(let y = 15; y >= 0; y--){
+            if(this.getBlockId(x, y, z) !== 0){
+                return y;
+            }
+        }
 
-	getHighestBlockId(x, z){
-		for(let y = 15; y >= 0; y--){
-			let id = this.getBlockId(x, y, z);
-			if(id !== 0){
-				return id;
-			}
-		}
-		return 0;
-	}
+        return 0;
+    }
 
-	getHighestBlockData(x, z){
-		return this.getBlockData(x, 15, z);
-	}
+    toBinary(){
+        return Buffer.from([0x00, ...this._blockIds, ...this._blockData]);
+    }
 
-	getHighestBlock(x, z){
-		for(let y = 15; y >= 0; y--){
-			if(this.getBlockId(x, y, z) !== 0){
-				return y;
-			}
-		}
+    static getIdIndex(x, y, z){
+        return (x << 8) | (z << 4) | y;
+    }
 
-		return 0;
-	}
+    static getDataIndex(x, y, z){
+        return (x << 7) + (z << 3) + (y >> 1);
+    }
 
-	toBinary(){
-		return Buffer.from([0x00, ...this._blockIds, ...this._blockData]);
-	}
+    static getLightIndex(x, y, z){
+        return SubChunk.getDataIndex(x, y, z);
+    }
 }
+
+let subchunk = new SubChunk();
 
 module.exports = SubChunk;

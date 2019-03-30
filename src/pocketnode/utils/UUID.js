@@ -1,42 +1,44 @@
 const BinaryStream = pocketnode("network/minecraft/NetworkBinaryStream");
 
 class UUID {
-	constructor(part1 = 0, part2 = 0, part3 = 0, part4 = 0, version = null){
-		this.initVars();
-		this._parts = [part1, part2, part3, part4];
-		this._version = version ? version : (part2 & 0xf000) >> 12;
-	}
+    initVars(){
+        this._parts = [0, 0, 0, 0];
+        this._version = null;
+    }
 
-	static fromString(uuid, version){
-		return UUID.fromBinary(Buffer.from(uuid.trim().replace(/-/g, "")), version);
-	}
+    constructor(part1 = 0, part2 = 0, part3 = 0, part4 = 0, version = null){
+        this.initVars();
+        this._parts = [part1, part2, part3, part4];
+        this._version = version ? version : (part2 & 0xf000) >> 12;
+    }
 
-	static fromBinary(buffer, version){
-		if(buffer.length !== 16){
-			throw new TypeError("UUID buffer must be exactly 16 bytes");
-		}
-		let stream = new BinaryStream(buffer);
+    getVersion(){
+        return this._version;
+    }
 
-		return new UUID(stream.readInt(), stream.readInt(), stream.readInt(), stream.readInt(), version);
-	}
+    equals(uuid){
+        if(uuid instanceof UUID){
+            return uuid._parts[0] === this._parts[0] && uuid._parts[1] === this._parts[1] && uuid._parts[2] === this._parts[2] && uuid._parts[3] === this._parts[3];
+        }
+        return false;
+    }
 
-	initVars(){
-		this._parts = [0, 0, 0, 0];
-		this._version = null;
-	}
+    static fromString(uuid, version){
+        return UUID.fromBinary(Buffer.from(uuid.trim().replace(/-/g, "")), version);
+    }
 
-	getVersion(){
-		return this._version;
-	}
+    static fromBinary(buffer, version){
+        if(buffer.length !== 16){
+            throw new TypeError("UUID buffer must be exactly 16 bytes");
+        }
+        let stream = new BinaryStream(buffer);
 
-	equals(uuid){
-		if(uuid instanceof UUID){
-			return uuid._parts[0] === this._parts[0] && uuid._parts[1] === this._parts[1] && uuid._parts[2] === this._parts[2] && uuid._parts[3] === this._parts[3];
-		}
-		return false;
-	}
+        return new UUID(stream.readInt(), stream.readInt(), stream.readInt(), stream.readInt(), version);
+    }
 
-	getPart(i){
-		return this._parts[i] ? this._parts[i] : null;
-	}
+    getPart(i){
+        return this._parts[i] ? this._parts[i] : null;
+    }
 }
+
+module.exports = UUID;
